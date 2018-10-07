@@ -11,6 +11,7 @@ namespace GalaxyScene
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GameManager gameManager;
 
         public GalaxySceneGame()
         {
@@ -20,6 +21,8 @@ namespace GalaxyScene
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.PreferredBackBufferWidth = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
             graphics.PreferredBackBufferHeight = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+
+            gameManager = new GameManager(this);
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace GalaxyScene
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            gameManager.Initialize();
             base.Initialize();
         }
 
@@ -40,10 +43,8 @@ namespace GalaxyScene
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            gameManager.LoadContent();
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace GalaxyScene
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            gameManager.UnloadContent();
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace GalaxyScene
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            gameManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -81,7 +82,7 @@ namespace GalaxyScene
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            // TODO: Add your drawing code here
+            gameManager.Draw(gameTime);
 
             base.Draw(gameTime);
         }
