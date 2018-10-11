@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GalaxyScene.Model;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace GalaxyScene.Services
 
         Matrix View { get; set; }
 
-        Vector3 PlayerPosition { get; set; }
+        Player Player { get; set; }
 
         float Scale { get; set; }
     }

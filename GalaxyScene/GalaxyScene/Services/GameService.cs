@@ -1,4 +1,5 @@
-﻿using GalaxyScene.Render;
+﻿using GalaxyScene.Model;
+using GalaxyScene.Render;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -26,9 +27,9 @@ namespace GalaxyScene.Services
         public Matrix View { get; set; }
 
         /// <summary>
-        /// Pozycja gracza
+        /// Gracz
         /// </summary>
-        public Vector3 PlayerPosition { get; set; }
+        public Player Player { get; set; }
 
         /// <summary>
         /// Skala gry
@@ -39,7 +40,7 @@ namespace GalaxyScene.Services
         public GameService()
         {
             projection = new Projection();
-            PlayerPosition = new Vector3(0, 0, 0);
+            Player = new Player();
             Scale = 1;
         }
     }

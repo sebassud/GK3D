@@ -20,7 +20,7 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            _view = Matrix.CreateLookAt(new Vector3(7, 0, 2), new Vector3(-7, 0, -2), Vector3.UnitZ);
+            _view = Matrix.CreateLookAt(gameService.Player.PlayerPosition, gameService.Player.PlayerPosition + gameService.Player.Direction, Vector3.UnitZ);
             gameService.View = _view;
 
             base.Initialize();
@@ -28,6 +28,9 @@ namespace GalaxyScene.Components
 
         public override void Update(GameTime gameTime)
         {
+            _view = Matrix.CreateLookAt(gameService.Player.PlayerPosition, gameService.Player.PlayerPosition + gameService.Player.Direction, Vector3.UnitZ);
+            gameService.View = _view;
+
             base.Update(gameTime);
         }
     }
