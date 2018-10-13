@@ -25,6 +25,8 @@ namespace GalaxyScene.Components
         {
             gameService.Player.PlayerPosition = new Vector3(7, 0, 0);
             gameService.Player.Direction = new Vector3(-1, 0, 0);
+            gameService.Player.LeftDirection = new Vector3(0, -1, 0);
+            gameService.Player.UpDirection = new Vector3(0, 0, 1);
 
             base.Initialize();
         }
@@ -34,11 +36,18 @@ namespace GalaxyScene.Components
             KeyboardState keyboard = Keyboard.GetState();
             Player player = gameService.Player;
             Vector3 position = player.PlayerPosition;
-            Vector3 upVector = player.Direction;
-            Vector3 leftVector = Vector3.Transform(upVector, Matrix.CreateRotationZ((float)Math.PI / 2));
+            Vector3 frontVector = new Vector3(player.Direction.X, player.Direction.Y, player.Direction.Z);
+            frontVector.Normalize();
+
+            Vector3 leftVector = new Vector3(gameService.Player.LeftDirection.X, gameService.Player.LeftDirection.Y, gameService.Player.LeftDirection.Z);
+            leftVector.Normalize();
+
+            Vector3 upVector = new Vector3(gameService.Player.UpDirection.X, gameService.Player.UpDirection.Y, gameService.Player.UpDirection.Z);
+            upVector.Normalize();
+
             if (keyboard.IsKeyDown(Keys.W) )
             {
-                position += upVector * speed;
+                position += frontVector * speed;
             }
             if (keyboard.IsKeyDown(Keys.A))
             {
@@ -49,6 +58,14 @@ namespace GalaxyScene.Components
                 position -= leftVector * speed;
             }
             if (keyboard.IsKeyDown(Keys.S))
+            {
+                position -= frontVector * speed;
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad8))
+            {
+                position += upVector * speed;
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad2))
             {
                 position -= upVector * speed;
             }
