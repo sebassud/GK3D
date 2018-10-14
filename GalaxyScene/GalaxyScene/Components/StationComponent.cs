@@ -36,9 +36,9 @@ namespace GalaxyScene.Components
         {
             HalfSphere(0.3f, 64);
             HalfSphere2(0.1f, 64);
-            _world1 = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, -0.4f, 4.9f));
-            _world2 = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, 0.4f, 4.9f));
-            _world3 = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, 0, 4.99f));
+            _world1 = Matrix.CreateTranslation(new Vector3(0, -0.4f, 4.9f)) * Matrix.CreateScale(gameService.Scale);
+            _world2 = Matrix.CreateTranslation(new Vector3(0, 0.4f, 4.9f)) * Matrix.CreateScale(gameService.Scale);
+            _world3 = Matrix.CreateTranslation(new Vector3(0, 0, 4.99f)) * Matrix.CreateScale(gameService.Scale);
             base.Initialize();
         }
 

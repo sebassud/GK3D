@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GalaxyScene.Model;
+using GalaxyScene.GameModels;
 using GalaxyScene.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -14,9 +14,9 @@ namespace GalaxyScene.Components
     {
         private IGameService gameService;
 
-        private float speed = 0.1f;
+        private float speed = 0.05f;
 
-        private float rotationSpeed = 0.01f;
+        private float rotationSpeed = 0.005f;
 
         private int mousePositionX;
         private int mousePositionY;

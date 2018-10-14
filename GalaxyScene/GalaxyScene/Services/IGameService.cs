@@ -1,4 +1,4 @@
-﻿using GalaxyScene.Model;
+﻿using GalaxyScene.GameModels;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

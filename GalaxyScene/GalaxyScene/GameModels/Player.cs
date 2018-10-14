@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GalaxyScene.Model
+namespace GalaxyScene.GameModels
 {
     public class Player
     {
