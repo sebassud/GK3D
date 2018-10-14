@@ -46,6 +46,7 @@
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
+    <Compile Include="Components\StationComponent.cs" />
     <Compile Include="GalaxySceneGame.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Model\Player.cs" />

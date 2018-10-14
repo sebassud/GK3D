@@ -28,7 +28,11 @@ namespace GalaxyScene
         /// </summary>
         public void Initialize()
         {
-            _components = new List<BaseComponent>() { new CameraComponent(_game), new PlayerComponent(_game), new PlanetoidComponent(_game) };
+            _components = new List<BaseComponent>() {
+                new CameraComponent(_game),
+                new PlayerComponent(_game),
+                new PlanetoidComponent(_game),
+                new StationComponent(_game)};
             foreach (var component in _components)
             {
                 component.Initialize();
