@@ -48,6 +48,43 @@ namespace GalaxyScene.Components
             base.LoadContent();
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice device = Game.GraphicsDevice;
+            device.Indices = _indexBuf;
+            device.SetVertexBuffer(_vertexBuf);
+
+            var _basicEffect = new BasicEffect(Game.GraphicsDevice);
+            _basicEffect.World = _world1;
+            _basicEffect.View = gameService.View;
+            _basicEffect.Projection = gameService.Projection;
+            _basicEffect.EnableDefaultLighting();
+            _basicEffect.Texture = _texture;
+            _basicEffect.TextureEnabled = true;
+
+            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
+            }
+
+            _basicEffect.World = _world2;
+            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
+            }
+
+            device.Indices = _indexBuf2;
+            device.SetVertexBuffer(_vertexBuf2);
+            _basicEffect.World = _world3;
+            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces2);
+            }
+        }
+
         private void HalfSphere(float radius, int slices)
         {
             _nVerticies = (slices + 1) * (slices + 1);
@@ -148,43 +185,6 @@ namespace GalaxyScene.Components
             _vertexBuf2.SetData(vertices, 0, vertices.Length);
             _indexBuf2.SetData(indices, 0, indices.Length);
             _nFaces2 = nIndicies / 3;
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice device = Game.GraphicsDevice;
-            device.Indices = _indexBuf;
-            device.SetVertexBuffer(_vertexBuf);
-
-            var _basicEffect = new BasicEffect(Game.GraphicsDevice);
-            _basicEffect.World = _world1;
-            _basicEffect.View = gameService.View;
-            _basicEffect.Projection = gameService.Projection;
-            _basicEffect.EnableDefaultLighting();
-            _basicEffect.Texture = _texture;
-            _basicEffect.TextureEnabled = true;
-
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
-            }
-
-            _basicEffect.World = _world2;
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
-            }
-
-            device.Indices = _indexBuf2;
-            device.SetVertexBuffer(_vertexBuf2);
-            _basicEffect.World = _world3;
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces2);
-            }
         }
     }
 }

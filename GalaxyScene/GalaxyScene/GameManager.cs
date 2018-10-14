@@ -30,8 +30,9 @@ namespace GalaxyScene
         {
             _components = new List<BaseComponent>() {
                 new CameraComponent(_game),
+                new SatelliteComponent(_game),
                 new PlayerComponent(_game),
-                new PlanetoidComponent(_game),
+                //new PlanetoidComponent(_game),
                 new StationComponent(_game)};
             foreach (var component in _components)
             {
