@@ -28,7 +28,7 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            gameService.Player.PlayerPosition = new Vector3(7, 0, 0);
+            gameService.Player.PlayerPosition = new Vector3(10, 0, 0);
             gameService.Player.Direction = new Vector3(-1, 0, 0);
             gameService.Player.LeftDirection = new Vector3(0, -1, 0);
             gameService.Player.UpDirection = new Vector3(0, 0, 1);

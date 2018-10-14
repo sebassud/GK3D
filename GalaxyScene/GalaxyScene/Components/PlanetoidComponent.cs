@@ -18,12 +18,26 @@ namespace GalaxyScene.Components
         private IndexBuffer _indexBuf;
         private int _nVerticies;
         private int _nFaces;
+        private Texture2D _texture;
+        private Matrix _world;
 
 
         public PlanetoidComponent(Game game) : base(game)
         {
-            Sphere(1, 32);
             gameService = game.Services.GetService<IGameService>();
+        }
+
+        public override void Initialize()
+        {
+            Sphere(5, 64);
+            _world = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, 0, 0));
+            base.Initialize();
+        }
+
+        public override void LoadContent()
+        {
+            _texture = Game.Content.Load<Texture2D>("Planetoida/white-sand2");
+            base.LoadContent();
         }
 
         private void Sphere(float radius, int slices)
@@ -43,12 +57,12 @@ namespace GalaxyScene.Components
             for (int sliceTheta = 0; sliceTheta < slices + 1; sliceTheta++)
             {
                 float r = (float)Math.Sin(sliceTheta * thetaStep);
-                float y = (float)Math.Cos(sliceTheta * thetaStep);
+                float z = (float)Math.Cos(sliceTheta * thetaStep);
 
                 for (int slicePhi = 0; slicePhi < (slices + 1); slicePhi++)
                 {
                     float x = r * (float)Math.Sin(slicePhi * phiStep);
-                    float z = r * (float)Math.Cos(slicePhi * phiStep);
+                    float y = r * (float)Math.Cos(slicePhi * phiStep);
 
                     vertices[iVertex].Position = new Vector3(x, y, z) * radius;
                     vertices[iVertex].Normal = Vector3.Normalize(new Vector3(x, y, z));
@@ -85,18 +99,19 @@ namespace GalaxyScene.Components
             device.SetVertexBuffer(_vertexBuf);
 
             var _basicEffect = new BasicEffect(Game.GraphicsDevice);
-            var _world = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, 0, 0));
             _basicEffect.World = _world;
             _basicEffect.View = gameService.View;
             _basicEffect.Projection = gameService.Projection;
             _basicEffect.EnableDefaultLighting();
+            _basicEffect.Texture = _texture;
+            _basicEffect.TextureEnabled = true;
 
             foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
             }
-            
+
         }
 
     }
