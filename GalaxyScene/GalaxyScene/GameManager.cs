@@ -35,7 +35,8 @@ namespace GalaxyScene
                 new StationComponent(_game),
                 new SatelliteComponent(_game),
                 new SpaceshipComponent(_game),
-                new ComDishComponent(_game)};
+                new ComDishComponent(_game),
+                new BackgroundComponent(_game)};
             foreach (var component in _components)
             {
                 component.Initialize();

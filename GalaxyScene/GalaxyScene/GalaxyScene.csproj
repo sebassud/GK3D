@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\BackgroundComponent.cs" />
     <Compile Include="Components\BaseComponent.cs" />
     <Compile Include="Components\BonusComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />

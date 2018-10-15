@@ -29,7 +29,7 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            Sphere(5, 64);
+            Sphere(5, 128);
             _world = Matrix.CreateScale(gameService.Scale) * Matrix.CreateTranslation(new Vector3(0, 0, 0));
             base.Initialize();
         }
@@ -105,6 +105,7 @@ namespace GalaxyScene.Components
             _basicEffect.EnableDefaultLighting();
             _basicEffect.Texture = _texture;
             _basicEffect.TextureEnabled = true;
+            _basicEffect.SpecularPower = 10000f;
 
             foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
             {
