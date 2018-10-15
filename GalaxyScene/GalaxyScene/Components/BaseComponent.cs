@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace GalaxyScene.Components
     /// </summary>
     public class BaseComponent : DrawableGameComponent
     {
+        protected Effect effect;
+
         /// <summary>
         /// Konstruktor
         /// </summary>
@@ -24,6 +27,7 @@ namespace GalaxyScene.Components
         /// </summary>
         public new virtual void LoadContent()
         {
+            effect = Game.Content.Load<Effect>("Shader/Shader");
             base.LoadContent();
         }
         /// <summary>

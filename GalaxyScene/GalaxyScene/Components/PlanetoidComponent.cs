@@ -98,16 +98,14 @@ namespace GalaxyScene.Components
             device.SetVertexBuffer(_vertexBuf);
             device.SetVertexBuffer(_vertexBuf);
 
-            var _basicEffect = new BasicEffect(Game.GraphicsDevice);
-            _basicEffect.World = _world;
-            _basicEffect.View = gameService.View;
-            _basicEffect.Projection = gameService.Projection;
-            _basicEffect.EnableDefaultLighting();
-            _basicEffect.Texture = _texture;
-            _basicEffect.TextureEnabled = true;
-            _basicEffect.SpecularPower = 10000f;
+            effect.Parameters["ModelTexture"].SetValue(_texture);
+            effect.Parameters["World"].SetValue(_world);
+            effect.Parameters["View"].SetValue(gameService.View);
+            effect.Parameters["Projection"].SetValue(gameService.Projection);
+            effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
+            effect.CurrentTechnique = effect.Techniques["Textured"];
 
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);

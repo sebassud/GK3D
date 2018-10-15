@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Shader\Shader.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

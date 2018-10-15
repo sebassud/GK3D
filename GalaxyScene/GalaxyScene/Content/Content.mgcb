@@ -245,3 +245,9 @@
 /processorParam:TextureFormat=Color
 /build:Background/High_quality_space_photos_5.jpg
 
+#begin Shader/Shader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shader/Shader.fx
+
