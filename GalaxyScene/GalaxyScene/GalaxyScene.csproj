@@ -44,6 +44,7 @@
     <Compile Include="Components\BaseComponent.cs" />
     <Compile Include="Components\BonusComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />
+    <Compile Include="Components\ComDishComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
     <Compile Include="Components\SatelliteComponent.cs" />
