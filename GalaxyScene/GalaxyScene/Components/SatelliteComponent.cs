@@ -23,8 +23,10 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            _world1 = Matrix.CreateTranslation(new Vector3(5000, 5000, 5000)) * Matrix.CreateScale(0.001f * gameService.Scale);
-            _world2 = Matrix.CreateTranslation(new Vector3(-5000, -5000, 5000)) * Matrix.CreateScale(0.001f * gameService.Scale);
+            _world1 = Matrix.CreateRotationX(MathHelper.PiOver4) * Matrix.CreateRotationZ(-(MathHelper.PiOver4 + MathHelper.Pi)) * Matrix.CreateScale(0.002f) *
+                Matrix.CreateTranslation(new Vector3(4, 4, 5)) * Matrix.CreateScale(gameService.Scale);
+            _world2 = Matrix.CreateRotationX(MathHelper.PiOver4 + MathHelper.Pi) * Matrix.CreateRotationZ(-(MathHelper.PiOver4 + MathHelper.Pi)) * Matrix.CreateScale(0.002f) *
+                Matrix.CreateTranslation(new Vector3(-4, -4, -5)) * Matrix.CreateScale(gameService.Scale);
             base.Initialize();
         }
 
@@ -32,6 +34,13 @@ namespace GalaxyScene.Components
         {
             _model = Game.Content.Load<Model>("Satellite/Satellite");
             base.LoadContent();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _world1 *= Matrix.CreateRotationZ(0.001f);
+            _world2 *= Matrix.CreateRotationZ(0.001f);
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -49,6 +58,7 @@ namespace GalaxyScene.Components
                 }
                 mesh.Draw();
             }
+
             foreach (ModelMesh mesh in _model.Meshes)
             {
                 foreach (BasicEffect be in mesh.Effects)
