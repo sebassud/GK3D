@@ -47,6 +47,7 @@
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
     <Compile Include="Components\SatelliteComponent.cs" />
+    <Compile Include="Components\SpaceshipComponent.cs" />
     <Compile Include="Components\StationComponent.cs" />
     <Compile Include="GalaxySceneGame.cs" />
     <Compile Include="GameManager.cs" />
