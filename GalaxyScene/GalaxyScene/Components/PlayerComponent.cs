@@ -12,8 +12,6 @@ namespace GalaxyScene.Components
 {
     public class PlayerComponent : BaseComponent
     {
-        private IGameService gameService;
-
         private float speed = 0.05f;
 
         private float rotationSpeed = 0.005f;
@@ -23,7 +21,6 @@ namespace GalaxyScene.Components
 
         public PlayerComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()

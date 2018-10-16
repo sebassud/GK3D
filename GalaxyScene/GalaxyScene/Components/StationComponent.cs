@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class StationComponent: BaseComponent
+    public class StationComponent: BaseGameComponent
     {
-        private IGameService gameService;
-
         private VertexBuffer _vertexBuf;
         private IndexBuffer _indexBuf;
         private int _nVerticies;
@@ -29,7 +27,6 @@ namespace GalaxyScene.Components
 
         public StationComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()
@@ -156,22 +153,19 @@ namespace GalaxyScene.Components
             device.Indices = _indexBuf;
             device.SetVertexBuffer(_vertexBuf);
 
-            var _basicEffect = new BasicEffect(Game.GraphicsDevice);
-            _basicEffect.World = _world1;
-            _basicEffect.View = gameService.View;
-            _basicEffect.Projection = gameService.Projection;
-            _basicEffect.EnableDefaultLighting();
-            _basicEffect.Texture = _texture;
-            _basicEffect.TextureEnabled = true;
+            var effect = GetEffect();
+            effect.Parameters["ModelTexture"].SetValue(_texture);
+            effect.CurrentTechnique = effect.Techniques["Textured"];
 
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            effect.Parameters["World"].SetValue(_world1);
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
             }
 
-            _basicEffect.World = _world2;
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            effect.Parameters["World"].SetValue(_world2);
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
@@ -179,8 +173,8 @@ namespace GalaxyScene.Components
 
             device.Indices = _indexBuf2;
             device.SetVertexBuffer(_vertexBuf2);
-            _basicEffect.World = _world3;
-            foreach (EffectPass pass in _basicEffect.CurrentTechnique.Passes)
+            effect.Parameters["World"].SetValue(_world3);
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces2);

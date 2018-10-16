@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class BackgroundComponent : BaseComponent
+    public class BackgroundComponent : BaseGameComponent
     {
-        private IGameService gameService;
         private Matrix _world;
         private Model _model;
 

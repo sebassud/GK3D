@@ -10,12 +10,9 @@ namespace GalaxyScene.Components
 {
     public class CameraComponent : BaseComponent
     {
-        private IGameService gameService;
-
         private Matrix _view;
         public CameraComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()

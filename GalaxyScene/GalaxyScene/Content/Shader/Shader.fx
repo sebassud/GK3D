@@ -13,7 +13,7 @@ float4x4 Projection;
 float4 MaterialColor;
 texture ModelTexture;
 float3 CameraPosition;
-float3 DirectionLight = float3(0, 0, 1);
+float3 DirectionLight = float3(0, 1, 1);
 //Diffuse
 float4 DiffuseColor = float4(1, 1, 1, 1);  //object color
 float DiffuseIntensity = 0.75; //Kd
@@ -23,7 +23,7 @@ float4 SpecularColor = float4(1, 1, 1, 1);
 float SpecularIntensity = 0.1;
 //Ambient
 float4 AmbientColor = float4(1, 1, 1, 1);
-float AmbientIntensity = 0.06;
+float AmbientIntensity = 0.05;
 //Reflectors
 
 sampler2D textureSampler = sampler_state {
@@ -83,7 +83,7 @@ float4 SpecPhong(float3 N, float3 L, float3 V, float distanceIntensity)
 	return specular;
 }
 
-VertexShaderOutput MainVS(in VertexShaderInput input)
+VertexShaderOutput TexturedVS(in VertexShaderInput input)
 {
 	VertexShaderOutput output = (VertexShaderOutput)0;
 
@@ -97,7 +97,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	return output;
 }
 
-float4 MainPS(VertexShaderOutput input) : COLOR
+float4 TexturedPS(VertexShaderOutput input) : COLOR
 {
 	float3 N = normalize(input.Normal);
 	float3 V = normalize(float3((CameraPosition - input.WorldPosition).xyz));
@@ -105,6 +105,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
 	textureColor.a = 1;
 	float4 resultColor = textureColor * AmbientIntensity;
+
 	float3 DiffuseLightDirection = DirectionLight;
 	float3 L = normalize(DiffuseLightDirection);
 	float4 diffColor = Diffuse(N, L, 1);
@@ -130,11 +131,66 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	return resultColor;
 }
 
+ColoredShaderOutput ColoredVS(in ColoredShaderInput input)
+{
+	ColoredShaderOutput output = (ColoredShaderOutput)0;
+
+	float4 worldPosition = mul(input.Position, World);
+	float4 viewPosition = mul(worldPosition, View);
+	float3 normal = normalize(mul(input.Normal, World));
+	output.Normal = normal;
+	output.Position = mul(viewPosition, Projection);
+	output.WorldPosition = worldPosition.xyz;
+	output.Color = MaterialColor;
+	return output;
+}
+
+float4 ColoredPS(ColoredShaderOutput input) : COLOR
+{
+	float3 N = normalize(input.Normal);
+	float3 V = normalize(float3((CameraPosition - input.WorldPosition).xyz));
+	float distanceIntensity = 1;
+	float4 resultColor = input.Color*AmbientIntensity;
+
+	float3 DiffuseLightDirection = DirectionLight;
+	float3 L = normalize(DiffuseLightDirection);
+	float4 diffColor = Diffuse(N, L, 1);
+	float4 specular = SpecPhong(N, L, V, 1);
+	resultColor += saturate(input.Color * diffColor + specular);
+	saturate(resultColor);
+
+	//for (int i = 0; i < LightsCount; i++)
+	//{
+	//	float3 DiffuseLightDirection = float3((LightPositions[i] - input.WorldPosition).xyz);
+	//	float3 L = normalize(DiffuseLightDirection);
+	//	float d2 = (LightPositions[i].x - input.WorldPosition.x)*(LightPositions[i].x - input.WorldPosition.x) + (LightPositions[i].y - input.WorldPosition.y)*(LightPositions[i].y - input.WorldPosition.y) + (LightPositions[i].z - input.WorldPosition.z)*(LightPositions[i].z - input.WorldPosition.z);
+	//	distanceIntensity = saturate(50 / d2);
+	//	float4 diffColor = Diffuse(N, L, distanceIntensity);
+	//	float4 specular = SpecPhong(N, L, V, distanceIntensity);
+	//	//Reflector
+	//	float4 att = 0;
+	//	float cos = dot(-DirectionVectors[i / 2], L);
+	//	att = pow(saturate(cos), P);
+	//	resultColor += saturate(input.Color * att * diffColor + att * specular);
+	//	saturate(resultColor);
+	//}
+	return resultColor;
+}
+
 technique Textured
 {
 	pass Pass1
 	{
-		VertexShader = compile VS_SHADERMODEL MainVS();
-		PixelShader = compile PS_SHADERMODEL MainPS();
+		VertexShader = compile VS_SHADERMODEL TexturedVS();
+		PixelShader = compile PS_SHADERMODEL TexturedPS();
+	}
+};
+
+technique Colored
+{
+	pass Pass1
+	{
+		VertexShader = compile VS_SHADERMODEL ColoredVS();
+		PixelShader = compile PS_SHADERMODEL ColoredPS();
 	}
 };

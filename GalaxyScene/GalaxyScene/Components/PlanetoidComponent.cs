@@ -10,10 +10,8 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class PlanetoidComponent : BaseComponent
+    public class PlanetoidComponent : BaseGameComponent
     {
-        private IGameService gameService;
-
         private VertexBuffer _vertexBuf;
         private IndexBuffer _indexBuf;
         private int _nVerticies;
@@ -24,7 +22,7 @@ namespace GalaxyScene.Components
 
         public PlanetoidComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
+            
         }
 
         public override void Initialize()
@@ -96,13 +94,11 @@ namespace GalaxyScene.Components
             GraphicsDevice device = Game.GraphicsDevice;
             device.Indices = _indexBuf;
             device.SetVertexBuffer(_vertexBuf);
-            device.SetVertexBuffer(_vertexBuf);
 
+
+            var effect = GetEffect();
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.Parameters["World"].SetValue(_world);
-            effect.Parameters["View"].SetValue(gameService.View);
-            effect.Parameters["Projection"].SetValue(gameService.Projection);
-            effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
             effect.CurrentTechnique = effect.Techniques["Textured"];
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -110,7 +106,6 @@ namespace GalaxyScene.Components
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
             }
-
         }
 
     }

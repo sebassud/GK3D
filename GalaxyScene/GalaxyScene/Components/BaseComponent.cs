@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GalaxyScene.Services;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace GalaxyScene.Components
     /// </summary>
     public class BaseComponent : DrawableGameComponent
     {
-        protected Effect effect;
+        protected IGameService gameService;
 
         /// <summary>
         /// Konstruktor
@@ -21,13 +22,13 @@ namespace GalaxyScene.Components
         /// <param name="game">Obiekt gry</param>
         public BaseComponent(Game game) : base(game)
         {
+            gameService = game.Services.GetService<IGameService>();
         }
         /// <summary>
         /// Metoda ładująca komponent
         /// </summary>
         public new virtual void LoadContent()
         {
-            effect = Game.Content.Load<Effect>("Shader/Shader");
             base.LoadContent();
         }
         /// <summary>

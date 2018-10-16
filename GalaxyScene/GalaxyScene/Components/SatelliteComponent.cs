@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class SatelliteComponent : BaseComponent
+    public class SatelliteComponent : BaseGameComponent
     {
-        private IGameService gameService;
         private Matrix _world1;
         private Matrix _world2;
         private Model _model;
 
         public SatelliteComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()
@@ -32,8 +30,9 @@ namespace GalaxyScene.Components
 
         public override void LoadContent()
         {
-            _model = Game.Content.Load<Model>("Satellite/Satellite");
             base.LoadContent();
+            _model = Game.Content.Load<Model>("Satellite/Satellite");
+            LoadMesh(_model);
         }
 
         public override void Update(GameTime gameTime)
@@ -49,25 +48,25 @@ namespace GalaxyScene.Components
             _model.CopyAbsoluteBoneTransformsTo(modelTransforms);
             foreach (ModelMesh mesh in _model.Meshes)
             {
-                foreach (BasicEffect be in mesh.Effects)
+                foreach (var part in mesh.MeshParts)
                 {
-                    be.EnableDefaultLighting();
-                    be.World = modelTransforms[mesh.ParentBone.Index] * _world1;
-                    be.View = gameService.View;
-                    be.Projection = gameService.Projection;
+                    var effect = GetEffect(part.Effect);
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world1);
+                    part.Effect = effect;
                 }
+
                 mesh.Draw();
             }
 
             foreach (ModelMesh mesh in _model.Meshes)
             {
-                foreach (BasicEffect be in mesh.Effects)
+                foreach (var part in mesh.MeshParts)
                 {
-                    be.EnableDefaultLighting();
-                    be.World = modelTransforms[mesh.ParentBone.Index] * _world2;
-                    be.View = gameService.View;
-                    be.Projection = gameService.Projection;
+                    var effect = GetEffect(part.Effect);
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world2);
+                    part.Effect = effect;
                 }
+
                 mesh.Draw();
             }
             base.Draw(gameTime);

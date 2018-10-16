@@ -9,15 +9,13 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class ComDishComponent : BaseComponent
+    public class ComDishComponent : BaseGameComponent
     {
-        private IGameService gameService;
         private Matrix _world;
         private Model _model;
 
         public ComDishComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()
@@ -29,8 +27,9 @@ namespace GalaxyScene.Components
 
         public override void LoadContent()
         {
-            _model = Game.Content.Load<Model>("ComDish/ComDish");
             base.LoadContent();
+            _model = Game.Content.Load<Model>("ComDish/ComDish");
+            LoadMesh(_model);
         }
 
         public override void Update(GameTime gameTime)
@@ -44,13 +43,13 @@ namespace GalaxyScene.Components
             _model.CopyAbsoluteBoneTransformsTo(modelTransforms);
             foreach (ModelMesh mesh in _model.Meshes)
             {
-                foreach (BasicEffect be in mesh.Effects)
+                foreach (var part in mesh.MeshParts)
                 {
-                    be.EnableDefaultLighting();
-                    be.World = modelTransforms[mesh.ParentBone.Index] * _world;
-                    be.View = gameService.View;
-                    be.Projection = gameService.Projection;
+                    var effect = GetEffect(part.Effect);
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
+                    part.Effect = effect;
                 }
+
                 mesh.Draw();
             }
             base.Draw(gameTime);
