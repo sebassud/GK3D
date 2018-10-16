@@ -23,7 +23,7 @@ namespace GalaxyScene.Components
         private Matrix _world1;
         private Matrix _world2;
         private Matrix _world3;
-
+        private Effect _effect;
 
         public StationComponent(Game game) : base(game)
         {
@@ -41,8 +41,9 @@ namespace GalaxyScene.Components
 
         public override void LoadContent()
         {
-            _texture = Game.Content.Load<Texture2D>("Station/blueTent");
             base.LoadContent();
+            _texture = Game.Content.Load<Texture2D>("Station/blueTent");
+            _effect = GetEffect();
         }
 
         private void HalfSphere(float radius, int slices)
@@ -153,7 +154,7 @@ namespace GalaxyScene.Components
             device.Indices = _indexBuf;
             device.SetVertexBuffer(_vertexBuf);
 
-            var effect = GetEffect();
+            var effect = GetEffect(_effect);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.CurrentTechnique = effect.Techniques["Textured"];
 

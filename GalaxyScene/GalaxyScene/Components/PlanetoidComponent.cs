@@ -18,7 +18,7 @@ namespace GalaxyScene.Components
         private int _nFaces;
         private Texture2D _texture;
         private Matrix _world;
-
+        private Effect _effect;
 
         public PlanetoidComponent(Game game) : base(game)
         {
@@ -34,8 +34,9 @@ namespace GalaxyScene.Components
 
         public override void LoadContent()
         {
-            _texture = Game.Content.Load<Texture2D>("Planetoida/white-sand2");
             base.LoadContent();
+            _texture = Game.Content.Load<Texture2D>("Planetoida/white-sand2");
+            _effect = GetEffect();
         }
 
         private void Sphere(float radius, int slices)
@@ -96,7 +97,7 @@ namespace GalaxyScene.Components
             device.SetVertexBuffer(_vertexBuf);
 
 
-            var effect = GetEffect();
+            var effect = GetEffect(_effect);
             effect.Parameters["ModelTexture"].SetValue(_texture);
             effect.Parameters["World"].SetValue(_world);
             effect.CurrentTechnique = effect.Techniques["Textured"];
