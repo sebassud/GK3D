@@ -25,7 +25,7 @@ float AmbientIntensity = 0.05;
 float3 DirectionLight = float3(0, 1, 1);
 float4 DirectionColor = float4(1, 1, 1, 1);
 //Reflectors
-float P = 5;
+float P = 8;
 int ReflectorsCount = 0;
 float3 DirectionVectors[4];
 float3 PositionVectors[4];
@@ -123,7 +123,7 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 		float3 DiffuseLightDirection = float3((PositionVectors[i] - input.WorldPosition).xyz);
 		float3 L = normalize(DiffuseLightDirection);
 		float d2 = (PositionVectors[i].x - input.WorldPosition.x)*(PositionVectors[i].x - input.WorldPosition.x) + (PositionVectors[i].y - input.WorldPosition.y)*(PositionVectors[i].y - input.WorldPosition.y) + (PositionVectors[i].z - input.WorldPosition.z)*(PositionVectors[i].z - input.WorldPosition.z);
-		distanceIntensity = saturate(5 / d2);
+		distanceIntensity = saturate(6 / d2);
 		float4 diffColor = Diffuse(N, L, ColorVectors[i], distanceIntensity);
 		float4 specular = SpecPhong(N, L, V, ColorVectors[i], distanceIntensity);
 		//Reflector
@@ -169,7 +169,7 @@ float4 ColoredPS(ColoredShaderOutput input) : COLOR
 		float3 DiffuseLightDirection = float3((PositionVectors[i] - input.WorldPosition).xyz);
 		float3 L = normalize(DiffuseLightDirection);
 		float d2 = (PositionVectors[i].x - input.WorldPosition.x)*(PositionVectors[i].x - input.WorldPosition.x) + (PositionVectors[i].y - input.WorldPosition.y)*(PositionVectors[i].y - input.WorldPosition.y) + (PositionVectors[i].z - input.WorldPosition.z)*(PositionVectors[i].z - input.WorldPosition.z);
-		distanceIntensity = saturate(5 / d2);
+		distanceIntensity = saturate(6 / d2);
 		float4 diffColor = Diffuse(N, L, ColorVectors[i], distanceIntensity);
 		float4 specular = SpecPhong(N, L, V, ColorVectors[i], distanceIntensity);
 		//Reflector

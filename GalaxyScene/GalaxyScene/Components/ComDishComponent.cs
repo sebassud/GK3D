@@ -47,6 +47,7 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
+                    effect.Parameters["SpecularIntensity"].SetValue(0.5f);
                     part.Effect = effect;
                 }
 

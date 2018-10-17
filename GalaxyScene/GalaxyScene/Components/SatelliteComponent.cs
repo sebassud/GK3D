@@ -43,6 +43,9 @@ namespace GalaxyScene.Components
             reflector2.Color = new Vector4(0, 0, 1, 0);
             gameService.Reflectors.Add(reflector2);
 
+            reflector1.Active = true;
+            reflector2.Active = true;
+
             base.Initialize();
         }
 
@@ -63,6 +66,7 @@ namespace GalaxyScene.Components
             reflector2.Direction = Vector3.Transform(reflector2.Direction, Matrix.CreateRotationZ(_speed));
             reflector1.Color = new Vector4(reflector1.Color.X, (reflector1.Color.Y + 0.001f) % 1, reflector1.Color.Z, reflector1.Color.W);
             reflector2.Color = new Vector4(reflector2.Color.X, (reflector2.Color.Y + 0.001f) % 1, reflector2.Color.Z, reflector2.Color.W);
+            
             base.Update(gameTime);
         }
 

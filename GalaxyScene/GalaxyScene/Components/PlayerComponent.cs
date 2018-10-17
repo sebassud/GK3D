@@ -19,18 +19,26 @@ namespace GalaxyScene.Components
         private int mousePositionX;
         private int mousePositionY;
 
+        private Reflector reflector;
+
         public PlayerComponent(Game game) : base(game)
         {
+            reflector = new Reflector();
         }
 
         public override void Initialize()
         {
-            gameService.Player.PlayerPosition = new Vector3(4, 4, 5);
+            gameService.Player.PlayerPosition = new Vector3(20, 0, 5);
             gameService.Player.Direction = new Vector3(-1, 0, 0);
             gameService.Player.LeftDirection = new Vector3(0, -1, 0);
             gameService.Player.UpDirection = new Vector3(0, 0, 1);
             mousePositionX = 500;
             mousePositionY = 500;
+
+            reflector.Position = gameService.Player.PlayerPosition;
+            reflector.Direction = gameService.Player.Direction;
+            reflector.Color = new Vector4(1, 1, 1, 1);
+            gameService.Reflectors.Add(reflector);
 
             base.Initialize();
         }
@@ -104,10 +112,43 @@ namespace GalaxyScene.Components
                 gameService.Player.Direction.Normalize();
                 Mouse.SetPosition(mousePositionX, mousePositionY);
             }
-
+            
             player.PlayerPosition = position;
 
+            UpdateReflector(keyboard);
+
             base.Update(gameTime);
+        }
+
+        private void UpdateReflector(KeyboardState keyboard)
+        {
+            if (keyboard.IsKeyDown(Keys.Z))
+            {
+                reflector.Active = false;
+            }
+            if (keyboard.IsKeyDown(Keys.X))
+            {
+                reflector.Active = true;
+            }
+            if (keyboard.IsKeyDown(Keys.R))
+            {
+                reflector.Color = new Vector4(1, 0, 0, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.G))
+            {
+                reflector.Color = new Vector4(0, 1, 0, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.B))
+            {
+                reflector.Color = new Vector4(0, 0, 1, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.Space))
+            {
+                reflector.Color = new Vector4(1, 1, 1, 1);
+            }
+
+            reflector.Position = gameService.Player.PlayerPosition;
+            reflector.Direction = gameService.Player.Direction;
         }
     }
 }

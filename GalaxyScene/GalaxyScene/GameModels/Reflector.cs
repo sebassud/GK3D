@@ -15,5 +15,7 @@ namespace GalaxyScene.GameModels
         public Vector3 Direction { get; set; }
 
         public Vector4 Color { get; set; }
+
+        public bool Active { get; set; }
     }
 }

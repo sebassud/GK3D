@@ -39,10 +39,10 @@ namespace GalaxyScene.Components
             effect.Parameters["View"].SetValue(gameService.View);
             effect.Parameters["Projection"].SetValue(gameService.Projection);
             effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
-            effect.Parameters["ReflectorsCount"].SetValue(gameService.Reflectors.Count);
-            effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Select(x => x.Direction).ToArray());
-            effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Select(x => x.Position).ToArray());
-            effect.Parameters["ColorVectors"].SetValue(gameService.Reflectors.Select(x => x.Color).ToArray());
+            effect.Parameters["ReflectorsCount"].SetValue(gameService.Reflectors.Where(x => x.Active).Count());
+            effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Direction).ToArray());
+            effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Position).ToArray());
+            effect.Parameters["ColorVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Color).ToArray());
 
             return effect;
         }
