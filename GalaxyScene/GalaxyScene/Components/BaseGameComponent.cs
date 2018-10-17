@@ -24,19 +24,25 @@ namespace GalaxyScene.Components
 
         protected Effect GetEffect(Effect effect)
         {
-            effect.Parameters["View"].SetValue(gameService.View);
-            effect.Parameters["Projection"].SetValue(gameService.Projection);
-            effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
-
-            return effect;
+            return FillParameter(effect);
         }
 
         protected Effect GetEffect()
         {
             var effect = _effect.Clone();
+
+            return FillParameter(effect);
+        }
+
+        private Effect FillParameter(Effect effect)
+        {
             effect.Parameters["View"].SetValue(gameService.View);
             effect.Parameters["Projection"].SetValue(gameService.Projection);
             effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
+            effect.Parameters["ReflectorsCount"].SetValue(gameService.Reflectors.Count);
+            effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Select(x => x.Direction).ToArray());
+            effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Select(x => x.Position).ToArray());
+            effect.Parameters["ColorVectors"].SetValue(gameService.Reflectors.Select(x => x.Color).ToArray());
 
             return effect;
         }

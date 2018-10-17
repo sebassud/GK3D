@@ -17,5 +17,7 @@ namespace GalaxyScene.Services
         Player Player { get; set; }
 
         float Scale { get; set; }
+
+        List<Reflector> Reflectors { get; set; }
     }
 }

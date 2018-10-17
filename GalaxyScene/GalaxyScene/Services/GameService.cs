@@ -35,6 +35,12 @@ namespace GalaxyScene.Services
         /// Skala gry
         /// </summary>
         public float Scale { get; set; }
+
+        /// <summary>
+        /// Reflektory
+        /// </summary>
+        public List<Reflector> Reflectors { get; set; }
+
         #endregion
 
         public GameService()
@@ -42,6 +48,7 @@ namespace GalaxyScene.Services
             projection = new Projection();
             Player = new Player();
             Scale = 1;
+            Reflectors = new List<Reflector>();
         }
     }
 }

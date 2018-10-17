@@ -53,6 +53,7 @@
     <Compile Include="Components\StationComponent.cs" />
     <Compile Include="GalaxySceneGame.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="GameModels\Reflector.cs" />
     <Compile Include="GameModels\Player.cs" />
     <Compile Include="Render\Projection.cs" />
     <Compile Include="Program.cs" />
