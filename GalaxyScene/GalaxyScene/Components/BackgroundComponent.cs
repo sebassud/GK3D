@@ -28,8 +28,9 @@ namespace GalaxyScene.Components
 
         public override void LoadContent()
         {
-            _model = Game.Content.Load<Model>("Background/galaxy");
             base.LoadContent();
+            _model = Game.Content.Load<Model>("Background/galaxy");
+            LoadMesh(_model);
         }
 
         public override void Update(GameTime gameTime)
@@ -43,13 +44,14 @@ namespace GalaxyScene.Components
             _model.CopyAbsoluteBoneTransformsTo(modelTransforms);
             foreach (ModelMesh mesh in _model.Meshes)
             {
-                foreach (BasicEffect be in mesh.Effects)
+                foreach (var part in mesh.MeshParts)
                 {
-                    be.EnableDefaultLighting();
-                    be.World = modelTransforms[mesh.ParentBone.Index] * _world;
-                    be.View = gameService.View;
-                    be.Projection = gameService.Projection;
+                    var effect = GetEffect(part.Effect);
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
+                    effect.CurrentTechnique = effect.Techniques["Skybox"];
+                    part.Effect = effect;
                 }
+
                 mesh.Draw();
             }
             base.Draw(gameTime);

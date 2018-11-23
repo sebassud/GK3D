@@ -136,6 +136,29 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 	return resultColor;
 }
 
+VertexShaderOutput SkyboxVS(in VertexShaderInput input)
+{
+	VertexShaderOutput output = (VertexShaderOutput)0;
+
+	float4 worldPosition = mul(input.Position, World);
+	float4 viewPosition = mul(worldPosition, View);
+	float3 normal = normalize(mul(input.Normal, World));
+	output.Normal = normal;
+	output.Position = mul(viewPosition, Projection);
+	output.WorldPosition = worldPosition.xyz;
+	output.TextureCoordinate = input.TextureCoordinate;
+	return output;
+}
+
+float4 SkyboxPS(VertexShaderOutput input) : COLOR
+{
+	float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
+	textureColor.a = 1;
+	float4 resultColor = textureColor * 0.8;
+
+	return resultColor;
+}
+
 ColoredShaderOutput ColoredVS(in ColoredShaderInput input)
 {
 	ColoredShaderOutput output = (ColoredShaderOutput)0;
@@ -188,6 +211,15 @@ technique Textured
 	{
 		VertexShader = compile VS_SHADERMODEL TexturedVS();
 		PixelShader = compile PS_SHADERMODEL TexturedPS();
+	}
+};
+
+technique Skybox
+{
+	pass Pass1
+	{
+		VertexShader = compile VS_SHADERMODEL SkyboxVS();
+		PixelShader = compile PS_SHADERMODEL SkyboxPS();
 	}
 };
 
