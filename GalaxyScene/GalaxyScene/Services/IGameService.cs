@@ -19,5 +19,7 @@ namespace GalaxyScene.Services
         float Scale { get; set; }
 
         List<Reflector> Reflectors { get; set; }
+
+        GraphicsDeviceManager Graphics { get; }
     }
 }

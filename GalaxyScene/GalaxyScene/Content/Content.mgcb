@@ -239,18 +239,6 @@
 /processorParam:TextureFormat=Color
 /build:Spaceship/VSDI_Plating_DIFF.png
 
-#begin Station/blueTent.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Station/blueTent.jpg
-
 #begin Station/texture-crush.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

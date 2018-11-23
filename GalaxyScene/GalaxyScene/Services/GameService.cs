@@ -41,14 +41,17 @@ namespace GalaxyScene.Services
         /// </summary>
         public List<Reflector> Reflectors { get; set; }
 
+        public GraphicsDeviceManager Graphics { get; }
+
         #endregion
 
-        public GameService()
+        public GameService(GraphicsDeviceManager graphics)
         {
             projection = new Projection();
             Player = new Player();
             Scale = 1;
             Reflectors = new List<Reflector>();
+            Graphics = graphics;
         }
     }
 }

@@ -18,10 +18,10 @@ namespace GalaxyScene
         /// Konstruktor
         /// </summary>
         /// <param name="game">Obiekt gry</param>
-        public GameManager(Game game)
+        public GameManager(Game game, GraphicsDeviceManager graphicsDeviceManager)
         {
             _game = game;
-            _game.Services.AddService(typeof(IGameService), new GameService());
+            _game.Services.AddService(typeof(IGameService), new GameService(graphicsDeviceManager));
         }
         /// <summary>
         /// Pobiera komponenty
@@ -36,7 +36,8 @@ namespace GalaxyScene
                 new SatelliteComponent(_game),
                 new SpaceshipComponent(_game),
                 new ComDishComponent(_game),
-                new BackgroundComponent(_game)};
+                new BackgroundComponent(_game),
+                new MenuComponent(_game)};
             foreach (var component in _components)
             {
                 component.Initialize();
