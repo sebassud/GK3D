@@ -33,10 +33,6 @@ float4 ColorVectors[4];
 
 sampler2D textureSampler = sampler_state {
 	Texture = (ModelTexture);
-	MagFilter = Linear;
-	MinFilter = Linear;
-	AddressU = Wrap;
-	AddressV = Wrap;
 };
 
 struct VertexShaderInput

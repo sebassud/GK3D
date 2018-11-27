@@ -80,7 +80,6 @@ namespace GalaxyScene
             GraphicsDevice.Clear(Color.TransparentBlack);
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
             gameManager.Draw(gameTime);
 
