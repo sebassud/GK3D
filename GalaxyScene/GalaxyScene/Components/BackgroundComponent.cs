@@ -29,7 +29,7 @@ namespace GalaxyScene.Components
         public override void LoadContent()
         {
             base.LoadContent();
-            _model = Game.Content.Load<Model>("Background/galaxy");
+            _model = Game.Content.Load<Model>("Background/skybox_galaxy");
             LoadMesh(_model);
         }
 
@@ -47,7 +47,7 @@ namespace GalaxyScene.Components
                 foreach (var part in mesh.MeshParts)
                 {
                     var effect = GetEffect(part.Effect);
-                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world * Matrix.CreateTranslation(gameService.Player.PlayerPosition));
                     effect.CurrentTechnique = effect.Techniques["Skybox"];
                     part.Effect = effect;
                 }
