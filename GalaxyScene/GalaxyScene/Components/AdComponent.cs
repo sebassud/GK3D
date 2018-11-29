@@ -1,5 +1,4 @@
-﻿using GalaxyScene.Services;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,28 +8,28 @@ using System.Threading.Tasks;
 
 namespace GalaxyScene.Components
 {
-    public class BackgroundComponent : BaseGameComponent
+    class AdComponent : BaseGameComponent
     {
         private Matrix _world;
         private Model _model;
 
-        public BackgroundComponent(Game game) : base(game)
+        public AdComponent(Game game) : base(game)
         {
-            gameService = game.Services.GetService<IGameService>();
         }
 
         public override void Initialize()
         {
-            _world = Matrix.CreateScale(0.01f) *
-                Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Matrix.CreateScale(gameService.Scale);
+            _world = Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateRotationY(-0.15f) * Matrix.CreateScale(0.001f) *
+                Matrix.CreateTranslation(new Vector3(-1, 0, 5)) * Matrix.CreateScale(gameService.Scale);
             base.Initialize();
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            _model = Game.Content.Load<Model>("Background/skybox_galaxy");
-            LoadMesh(_model, "Shader_background");
+            _model = Game.Content.Load<Model>("Ad/AD");
+
+            LoadMesh(_model, "Shader_Ad");
         }
 
         public override void Update(GameTime gameTime)
@@ -47,7 +46,8 @@ namespace GalaxyScene.Components
                 foreach (var part in mesh.MeshParts)
                 {
                     var effect = GetEffect(part.Effect);
-                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world * Matrix.CreateTranslation(gameService.Player.PlayerPosition));
+                    effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
+                    effect.Parameters["SpecularIntensity"].SetValue(0.5f);
                     part.Effect = effect;
                 }
 

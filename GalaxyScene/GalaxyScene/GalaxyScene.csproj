@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\AdComponent.cs" />
     <Compile Include="Components\BackgroundComponent.cs" />
     <Compile Include="Components\BaseComponent.cs" />
     <Compile Include="Components\BaseGameComponent.cs" />
@@ -73,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Shader\Shader.fx" />
+    <Content Include="Content\Shader\Shader_Ad.fx" />
+    <Content Include="Content\Shader\Shader_background.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

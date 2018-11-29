@@ -37,6 +37,7 @@ namespace GalaxyScene
                 new SpaceshipComponent(_game),
                 new ComDishComponent(_game),
                 new BackgroundComponent(_game),
+                new AdComponent(_game),
                 new MenuComponent(_game)};
             foreach (var component in _components)
             {
