@@ -38,7 +38,7 @@ namespace GalaxyScene.Render
         {
             PreferredBackBufferHeight = preferredBackBufferHeight;
             PreferredBackBufferWidth = preferredBackBufferWidth;
-            MatrixProjection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), preferredBackBufferWidth / (float)preferredBackBufferHeight, 0.1f, 200);
+            MatrixProjection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), preferredBackBufferWidth / (float)preferredBackBufferHeight, 0.01f, 2000);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace GalaxyScene.Components
     {
         private Matrix _world;
         private Model _model;
+        private float _scale = 1f;
+        private bool pressingMinus = false;
+        private bool pressingPlus = false;
 
         public AdComponent(Game game) : base(game)
         {
@@ -34,6 +38,27 @@ namespace GalaxyScene.Components
 
         public override void Update(GameTime gameTime)
         {
+            KeyboardState keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.F1) && !pressingMinus)
+            {
+                _scale -= 0.1f;
+                pressingMinus = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F1))
+            {
+                pressingMinus = false;
+            }
+
+            if (keyboard.IsKeyDown(Keys.F2) && !pressingPlus)
+            {
+                _scale += 0.1f;
+                pressingPlus = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F2))
+            {
+                pressingPlus = false;
+            }
+
             base.Update(gameTime);
         }
 
@@ -48,6 +73,8 @@ namespace GalaxyScene.Components
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
                     effect.Parameters["SpecularIntensity"].SetValue(0.5f);
+                    effect.Parameters["Scale"].SetValue(_scale);
+
                     part.Effect = effect;
                 }
 

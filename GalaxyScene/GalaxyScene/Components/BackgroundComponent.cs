@@ -22,7 +22,7 @@ namespace GalaxyScene.Components
         public override void Initialize()
         {
             _world = Matrix.CreateScale(0.01f) *
-                Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Matrix.CreateScale(gameService.Scale);
+                Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Matrix.CreateScale(gameService.Scale * 10);
             base.Initialize();
         }
 

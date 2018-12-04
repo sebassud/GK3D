@@ -32,7 +32,7 @@ float3 PositionVectors[4];
 float4 ColorVectors[4];
 
 //
-float Scale = 0.5;
+float Scale = 1;
 
 sampler2D textureSampler = sampler_state {
 	Texture = (ModelTexture);
