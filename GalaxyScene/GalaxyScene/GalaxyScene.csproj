@@ -47,6 +47,7 @@
     <Compile Include="Components\BaseGameComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\ComDishComponent.cs" />
+    <Compile Include="Components\FireComponent.cs" />
     <Compile Include="Components\MenuComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="GameManager.cs" />
     <Compile Include="GameModels\Reflector.cs" />
     <Compile Include="GameModels\Player.cs" />
+    <Compile Include="Render\Particle.cs" />
+    <Compile Include="Render\ParticleSystem.cs" />
     <Compile Include="Render\Projection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +78,7 @@
   <ItemGroup>
     <Content Include="Content\Shader\Shader.fx" />
     <Content Include="Content\Shader\Shader_Ad.fx" />
+    <Content Include="Content\Shader\Shader_Particle.fx" />
     <Content Include="Content\Shader\Shader_background.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>

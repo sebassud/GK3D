@@ -106,6 +106,18 @@
 /processorParam:TextureFormat=Color
 /build:ComDish/DishDEAD.jpg
 
+#begin Fire/fire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fire/fire.png
+
 #begin Planetoida/white-sand2.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -166,6 +178,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Shader/Shader_background.fx
+
+#begin Shader/Shader_Particle.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shader/Shader_Particle.fx
 
 #begin Spaceship/Plating.png
 /importer:TextureImporter
