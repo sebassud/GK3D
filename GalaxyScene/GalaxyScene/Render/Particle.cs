@@ -12,6 +12,7 @@ namespace GalaxyScene.Render
         public Vector3 Position { get; set; }
         public Vector3 Velocity { get; set; }
         public int TTL { get; set; }
+        public int MaxTTL { get; set; }
         public float Rotation { get; set; }
         public float Scale { get; set; }
 
@@ -20,13 +21,14 @@ namespace GalaxyScene.Render
             Position = position;
             Velocity = velocity;
             TTL = tTL;
+            MaxTTL = tTL;
             Rotation = rotation;
             Scale = scale;
         }
 
         public bool Update()
         {
-            Velocity = new Vector3(Velocity.X, Velocity.Y, Velocity.Z - 0.001f * Scale);
+            Velocity = Velocity - Vector3.Normalize(Position) * Scale * 0.001f;
             Position += Velocity * Scale;
             TTL--;
             return TTL > 0;

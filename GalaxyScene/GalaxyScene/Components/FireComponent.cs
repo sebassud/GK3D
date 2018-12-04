@@ -14,7 +14,7 @@ namespace GalaxyScene.Components
     {
         private Matrix _world;
         private ParticleSystem _particleSystem;
-        VertexBuffer treeVertexBuffer;
+        ParticleRender _particleRender;
         private Texture2D textureParticle;
         private Effect effectParticle;
 
@@ -26,7 +26,9 @@ namespace GalaxyScene.Components
         public override void Initialize()
         {
             _world = Matrix.Identity;
-            _particleSystem = new ParticleSystem(new Vector3(-0.4f, 0.1f, 5), Vector3.UnitZ / 1000, 100, 100);
+            Vector3 pos = new Vector3(-0.4f, 0.1f, 5);
+            _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 500);
+            _particleRender = new ParticleRender();
             base.Initialize();
         }
 
@@ -41,7 +43,8 @@ namespace GalaxyScene.Components
         {
             base.Update(gameTime);
             _particleSystem.Update();
-            CreateBillboardVerticesFromList(_particleSystem.Particles.OrderByDescending(p => (p.Position - gameService.Player.PlayerPosition).Length()).Select(p => p.Position).ToList());
+            _particleRender.Clear();
+            CreateBillboardVerticesFromList(_particleSystem.Particles.OrderByDescending(p => (p.Position - gameService.Player.PlayerPosition).Length()).ToList());
         }
 
         public override void Draw(GameTime gameTime)
@@ -67,30 +70,21 @@ namespace GalaxyScene.Components
             foreach (EffectPass pass in effectParticle.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                Game.GraphicsDevice.SetVertexBuffer(treeVertexBuffer);
-                Game.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, treeVertexBuffer.VertexCount / 3);
+                var buffer = _particleRender.GetBuffer(GraphicsDevice);
+                Game.GraphicsDevice.SetVertexBuffer(buffer);
+                Game.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, buffer.VertexCount / 3);
+
             }
             Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             Game.GraphicsDevice.BlendState = BlendState.Opaque;
         }
 
-        private void CreateBillboardVerticesFromList(List<Vector3> treeList)
+        private void CreateBillboardVerticesFromList(List<Particle> particles)
         {
-            VertexPositionTexture[] billboardVertices = new VertexPositionTexture[treeList.Count * 6];
-            int i = 0;
-            foreach (Vector3 currentV3 in treeList)
+            foreach (Particle particle in particles)
             {
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
-
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 0));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(1, 1));
-                billboardVertices[i++] = new VertexPositionTexture(currentV3, new Vector2(0, 1));
+                _particleRender.AddParticle(particle);
             }
-
-            treeVertexBuffer = new VertexBuffer(Game.GraphicsDevice, typeof(VertexPositionTexture), billboardVertices.Length, BufferUsage.WriteOnly);
-            treeVertexBuffer.SetData(billboardVertices);
         }
     }
 }

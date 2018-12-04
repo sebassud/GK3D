@@ -15,6 +15,7 @@ namespace GalaxyScene.Render
         public int MaxTTL { get; set; }
         public List<Particle> Particles { get; set; }
         private Random _rand;
+        private float speed = 0.02f;
 
         public ParticleSystem(Vector3 emitterCenter, Vector3 emitterDirection, int particlesLimit, int maxTTL)
         {
@@ -28,14 +29,14 @@ namespace GalaxyScene.Render
 
         private Particle CreateParticle()
         {
-            var scale = 0.1f;
-            var x = EmitterDirection.X + ((float) _rand.NextDouble()- 0.5f)*scale/10;
-            var y = EmitterDirection.Y + ((float)_rand.NextDouble() - 0.5f) *scale/10;
-            var z = EmitterDirection.Z + (float) _rand.NextDouble() *scale/5;
-            var ttl = _rand.Next(10, MaxTTL);
+            var scale = 0.05f;
+            var x = EmitterDirection.X + ((float)_rand.NextDouble() - 0.5f);
+            var y = EmitterDirection.Y + ((float)_rand.NextDouble() - 0.5f);
+            var z = EmitterDirection.Z + ((float)_rand.NextDouble() - 0.5f);
+            var ttl = _rand.Next(50, MaxTTL);
             return new Particle(
                 EmitterCenter,
-                new Vector3(x, y, z),
+                new Vector3(x * speed,  y * speed, z * speed),
                 ttl,
                 0f,
                 scale
