@@ -61,6 +61,7 @@
     <Compile Include="Render\Particle.cs" />
     <Compile Include="Render\ParticleRender.cs" />
     <Compile Include="Render\ParticleSystem.cs" />
+    <Compile Include="Render\ParticleVertex.cs" />
     <Compile Include="Render\Projection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

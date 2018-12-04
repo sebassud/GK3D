@@ -22,6 +22,8 @@ struct BBVertexToPixel
 {
     float4 Position : POSITION;
     float2 TexCoord    : TEXCOORD0;
+	float2 TexCoordInter    : TEXCOORD1;
+	float Ratio : PSIZE;
 };
 struct BBPixelToFrame
 {
@@ -29,7 +31,7 @@ struct BBPixelToFrame
 };
 
 //------- Technique: CylBillboard --------
-BBVertexToPixel CylBillboardVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCOORD0)
+BBVertexToPixel CylBillboardVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCOORD0, float2 inTexCoordInter : TEXCOORD1, float inScale: PSIZE0, float inRatio: PSIZE1)
 {
     BBVertexToPixel Output = (BBVertexToPixel)0;
 
@@ -37,9 +39,9 @@ BBVertexToPixel CylBillboardVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCO
     float3 eyeVector = center - xCamPos;
 
     float3 upVector = xAllowedRotDir;
-    upVector = normalize(upVector)*scale;
+    upVector = normalize(upVector)*scale*inScale;
     float3 sideVector = cross(eyeVector,upVector);
-    sideVector = normalize(sideVector)*scale;
+    sideVector = normalize(sideVector)*scale*inScale;
 
     float3 finalPosition = center;
     finalPosition += (inTexCoord.x-0.5f)*sideVector;
@@ -51,6 +53,8 @@ BBVertexToPixel CylBillboardVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCO
     Output.Position = mul(finalPosition4, preViewProjection);
 
     Output.TexCoord = inTexCoord;
+	Output.TexCoordInter = inTexCoordInter;
+	Output.Ratio = inRatio;
 
     return Output;
 }
@@ -58,7 +62,7 @@ BBVertexToPixel CylBillboardVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCO
 BBPixelToFrame BillboardPS(BBVertexToPixel PSIn) : COLOR0
 {
     BBPixelToFrame Output = (BBPixelToFrame)0;
-    Output.Color = tex2D(textureSampler, PSIn.TexCoord);
+    Output.Color = PSIn.Ratio * tex2D(textureSampler, PSIn.TexCoord) + (1 - PSIn.Ratio) * tex2D(textureSampler, PSIn.TexCoordInter);
 
     return Output;
 }
