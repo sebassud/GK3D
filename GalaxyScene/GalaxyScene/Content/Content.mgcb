@@ -118,6 +118,18 @@
 /processorParam:TextureFormat=Color
 /build:Fire/fire.png
 
+#begin Meteor/meteor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Meteor/meteor.png
+
 #begin Planetoida/white-sand2.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -178,6 +190,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Shader/Shader_background.fx
+
+#begin Shader/Shader_Billboard.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shader/Shader_Billboard.fx
 
 #begin Shader/Shader_Particle.fx
 /importer:EffectImporter

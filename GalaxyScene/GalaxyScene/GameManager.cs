@@ -39,6 +39,7 @@ namespace GalaxyScene
                 new BackgroundComponent(_game),
                 new AdComponent(_game),
                 new FireComponent(_game),
+                new MeteorComponent(_game),
                 new MenuComponent(_game)};
             foreach (var component in _components)
             {

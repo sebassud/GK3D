@@ -49,6 +49,7 @@
     <Compile Include="Components\ComDishComponent.cs" />
     <Compile Include="Components\FireComponent.cs" />
     <Compile Include="Components\MenuComponent.cs" />
+    <Compile Include="Components\MeteorComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
     <Compile Include="Components\SatelliteComponent.cs" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <Content Include="Content\Shader\Shader.fx" />
     <Content Include="Content\Shader\Shader_Ad.fx" />
+    <Content Include="Content\Shader\Shader_Billboard.fx" />
     <Content Include="Content\Shader\Shader_Particle.fx" />
     <Content Include="Content\Shader\Shader_background.fx" />
     <Content Include="Icon.ico" />
