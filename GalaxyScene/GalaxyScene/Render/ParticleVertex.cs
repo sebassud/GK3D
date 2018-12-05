@@ -14,17 +14,20 @@ namespace GalaxyScene.Render
 
         public Vector2 TexCoord;
 
-        public Vector2 TexCoordInter;
+        public Vector2 TexCoordCorner1;
+
+        public Vector2 TexCoordCorner2;
 
         public float Scale;
 
         public float Ratio;
 
-        public ParticleVertex(Vector3 position, Vector2 texCoord, Vector2 texCoordInter, float scale, float ratio)
+        public ParticleVertex(Vector3 position, Vector2 texCoord, Vector2 texCoordCorner1, Vector2 texCoordCorner2, float scale, float ratio)
         {
             Position = position;
             TexCoord = texCoord;
-            TexCoordInter = texCoordInter;
+            TexCoordCorner1 = texCoordCorner1;
+            TexCoordCorner2 = texCoordCorner2;
             Scale = scale;
             Ratio = ratio;
         }
@@ -37,14 +40,16 @@ namespace GalaxyScene.Render
                                  VertexElementUsage.TextureCoordinate, 0),
           new VertexElement(20, VertexElementFormat.Vector2,
                                  VertexElementUsage.TextureCoordinate, 0),
-          new VertexElement(28, VertexElementFormat.Single,
+          new VertexElement(28, VertexElementFormat.Vector2,
+                                 VertexElementUsage.TextureCoordinate, 0),
+          new VertexElement(36, VertexElementFormat.Single,
                                  VertexElementUsage.PointSize, 0),
-          new VertexElement(32, VertexElementFormat.Single,
+          new VertexElement(40, VertexElementFormat.Single,
                                  VertexElementUsage.PointSize, 0)
 
         );
 
-        public const int SizeInBytes = 36;
+        public const int SizeInBytes = 44;
 
         VertexDeclaration IVertexType.VertexDeclaration => VertexDeclaration;
     }

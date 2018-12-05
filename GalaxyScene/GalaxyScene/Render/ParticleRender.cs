@@ -37,18 +37,18 @@ namespace GalaxyScene.Render
             x = k % 4;
             var coordinates2 = GetCoordinatesTexture(x, y);
 
-            billboardVertices[0] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item1.X, coordinates.Item1.Y),
+            billboardVertices[0] = new ParticleVertex(particle.Position, new Vector2(0, 0), new Vector2(coordinates.Item1.X, coordinates.Item1.Y),
                 new Vector2(coordinates2.Item1.X, coordinates2.Item1.Y), scale, ratio);
-            billboardVertices[1] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item2.X, coordinates.Item1.Y),
+            billboardVertices[1] = new ParticleVertex(particle.Position, new Vector2(1, 0), new Vector2(coordinates.Item2.X, coordinates.Item1.Y),
                 new Vector2(coordinates2.Item2.X, coordinates2.Item1.Y), scale, ratio);
-            billboardVertices[2] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item2.X, coordinates.Item2.Y),
+            billboardVertices[2] = new ParticleVertex(particle.Position, new Vector2(1, 1), new Vector2(coordinates.Item2.X, coordinates.Item2.Y),
                 new Vector2(coordinates2.Item2.X, coordinates2.Item2.Y), scale, ratio);
 
-            billboardVertices[3] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item1.X, coordinates.Item1.Y),
+            billboardVertices[3] = new ParticleVertex(particle.Position, new Vector2(0, 0), new Vector2(coordinates.Item1.X, coordinates.Item1.Y),
                 new Vector2(coordinates2.Item1.X, coordinates2.Item1.Y), scale, ratio);
-            billboardVertices[4] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item2.X, coordinates.Item2.Y),
+            billboardVertices[4] = new ParticleVertex(particle.Position, new Vector2(1, 1), new Vector2(coordinates.Item2.X, coordinates.Item2.Y),
                 new Vector2(coordinates2.Item2.X, coordinates2.Item2.Y), scale, ratio);
-            billboardVertices[5] = new ParticleVertex(particle.Position, new Vector2(coordinates.Item1.X, coordinates.Item2.Y),
+            billboardVertices[5] = new ParticleVertex(particle.Position, new Vector2(0, 1), new Vector2(coordinates.Item1.X, coordinates.Item2.Y),
                 new Vector2(coordinates2.Item1.X, coordinates2.Item2.Y), scale, ratio);
 
             list_vertex.AddRange(billboardVertices);
