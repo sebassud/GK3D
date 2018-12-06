@@ -38,6 +38,7 @@ namespace GalaxyScene.Render
                 EmitterCenter,
                 new Vector3(x * speed,  y * speed, z * speed),
                 ttl,
+                MaxTTL,
                 0f,
                 scale
             );

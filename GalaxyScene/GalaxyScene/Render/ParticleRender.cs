@@ -23,13 +23,14 @@ namespace GalaxyScene.Render
         {
             ParticleVertex[] billboardVertices = new ParticleVertex[6];
 
-            var scale = (float)particle.TTL / particle.MaxTTL;
-            int k = 16 - (int)Math.Round(scale * 16, MidpointRounding.AwayFromZero);
+            var scale = (float)particle.TTL / particle.StartTTL;
+            var time = particle.Time;
+            int k = 16 - (int)Math.Round(time * 16, MidpointRounding.AwayFromZero);
             int y = k / 4;
             int x = k % 4;
             var coordinates = GetCoordinatesTexture(x, y);
-            var ratio = 1 - Math.Abs(k - (16 - scale * 16));
-            if (k < 16 - scale * 16)
+            var ratio = 1 - Math.Abs(k - (16 - time * 16));
+            if (k < 16 - time * 16)
                 k++;
             else
                 k--;

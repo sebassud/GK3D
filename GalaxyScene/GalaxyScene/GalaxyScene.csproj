@@ -52,6 +52,7 @@
     <Compile Include="Components\MeteorComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
+    <Compile Include="Components\ReflectComponent.cs" />
     <Compile Include="Components\SatelliteComponent.cs" />
     <Compile Include="Components\SpaceshipComponent.cs" />
     <Compile Include="Components\StationComponent.cs" />
@@ -84,6 +85,7 @@
     <Content Include="Content\Shader\Shader_Billboard.fx" />
     <Content Include="Content\Shader\Shader_Particle.fx" />
     <Content Include="Content\Shader\Shader_background.fx" />
+    <Content Include="Content\Shader\Shader_Reflect.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

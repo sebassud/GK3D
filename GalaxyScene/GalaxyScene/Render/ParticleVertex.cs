@@ -14,9 +14,9 @@ namespace GalaxyScene.Render
 
         public Vector2 TexCoord;
 
-        public Vector2 TexCoordCorner1;
+        public Vector2 TexCoord1;
 
-        public Vector2 TexCoordCorner2;
+        public Vector2 TexCoord2;
 
         public float Scale;
 
@@ -26,8 +26,8 @@ namespace GalaxyScene.Render
         {
             Position = position;
             TexCoord = texCoord;
-            TexCoordCorner1 = texCoordCorner1;
-            TexCoordCorner2 = texCoordCorner2;
+            TexCoord1 = texCoordCorner1;
+            TexCoord2 = texCoordCorner2;
             Scale = scale;
             Ratio = ratio;
         }

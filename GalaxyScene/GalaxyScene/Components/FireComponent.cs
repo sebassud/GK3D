@@ -27,7 +27,7 @@ namespace GalaxyScene.Components
         {
             _world = Matrix.Identity;
             Vector3 pos = new Vector3(-0.4f, 0.1f, 5);
-            _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 500);
+            _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 300);
             _particleRender = new ParticleRender();
             base.Initialize();
         }

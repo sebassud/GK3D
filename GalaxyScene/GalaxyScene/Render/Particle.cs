@@ -9,19 +9,22 @@ namespace GalaxyScene.Render
 {
     public class Particle
     {
+        public int StartTTL { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Velocity { get; set; }
         public int TTL { get; set; }
         public int MaxTTL { get; set; }
         public float Rotation { get; set; }
         public float Scale { get; set; }
+        public float Time => (TTL + (MaxTTL - StartTTL)) / (float)MaxTTL;
 
-        public Particle(Vector3 position, Vector3 velocity, int tTL, float rotation, float scale)
+        public Particle(Vector3 position, Vector3 velocity, int tTL, int maxTTL, float rotation, float scale)
         {
             Position = position;
             Velocity = velocity;
             TTL = tTL;
-            MaxTTL = tTL;
+            StartTTL = tTL;
+            MaxTTL = maxTTL;
             Rotation = rotation;
             Scale = scale;
         }

@@ -22,6 +22,7 @@ namespace GalaxyScene.Components
             _effects.Add("Shader", Game.Content.Load<Effect>("Shader/Shader"));
             _effects.Add("Shader_Ad", Game.Content.Load<Effect>("Shader/Shader_Ad"));
             _effects.Add("Shader_background", Game.Content.Load<Effect>("Shader/Shader_background"));
+            _effects.Add("Shader_Reflect", Game.Content.Load<Effect>("Shader/Shader_Reflect"));
             base.LoadContent();
         }
 
