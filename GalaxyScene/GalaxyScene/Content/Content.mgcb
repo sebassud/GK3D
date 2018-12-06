@@ -44,7 +44,7 @@
 /processorParam:TextureFormat=Color
 /build:Ad/comment.jpg
 
-#begin Background/skybox_galaxy.fbx
+#begin Background/cube.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -61,19 +61,19 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Background/skybox_galaxy.fbx
+/build:Background/cube.fbx
 
-#begin Background/space-3d-screenshot.png
+#begin Background/Sunset.dds
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
+/processorParam:PremultiplyAlpha=False
 /processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
+/processorParam:MakeSquare=True
 /processorParam:TextureFormat=Color
-/build:Background/space-3d-screenshot.png
+/build:Background/Sunset.dds
 
 #begin ComDish/ComDish.fbx
 /importer:FbxImporter

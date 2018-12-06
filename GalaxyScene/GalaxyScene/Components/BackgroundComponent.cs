@@ -13,6 +13,8 @@ namespace GalaxyScene.Components
     {
         private Matrix _world;
         private Model _model;
+        private TextureCube _textureCube;
+        private Matrix _rotation;
 
         public BackgroundComponent(Game game) : base(game)
         {
@@ -21,15 +23,16 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            _world = Matrix.CreateScale(0.01f) *
-                Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Matrix.CreateScale(gameService.Scale * 10);
+            _world = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Matrix.CreateScale(gameService.Scale * 1000);
+            _rotation = Matrix.CreateRotationX(-MathHelper.PiOver2);
             base.Initialize();
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
-            _model = Game.Content.Load<Model>("Background/skybox_galaxy");
+            _model = Game.Content.Load<Model>("Background/cube");
+            _textureCube = Game.Content.Load<TextureCube>("Background/Sunset");
             LoadMesh(_model, "Shader_background");
         }
 
@@ -40,6 +43,7 @@ namespace GalaxyScene.Components
 
         public override void Draw(GameTime gameTime)
         {
+            Game.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             Matrix[] modelTransforms = new Matrix[_model.Bones.Count];
             _model.CopyAbsoluteBoneTransformsTo(modelTransforms);
             foreach (ModelMesh mesh in _model.Meshes)
@@ -48,11 +52,15 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world * Matrix.CreateTranslation(gameService.Player.PlayerPosition));
+                    part.Effect.Parameters["ModelTexture"].SetValue(_textureCube);
+                    part.Effect.Parameters["Rotation"].SetValue(_rotation);
                     part.Effect = effect;
                 }
 
                 mesh.Draw();
             }
+            Game.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
             base.Draw(gameTime);
         }
     }

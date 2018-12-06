@@ -10,12 +10,13 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
+float4x4 Rotation;
 float4 MaterialColor;
 texture ModelTexture;
 float3 CameraPosition;
 //Diffuse
 float DiffuseIntensity = 0.75; //Kd
-//Specular
+							   //Specular
 float Shininess = 50;
 float SpecularIntensity = 0.1;
 //Ambient
@@ -31,67 +32,46 @@ float3 DirectionVectors[4];
 float3 PositionVectors[4];
 float4 ColorVectors[4];
 
-sampler2D textureSampler = sampler_state {
-	Texture = (ModelTexture);
+
+samplerCUBE SkyBoxSampler = sampler_state
+{
+	texture = <ModelTexture>;
 };
 
 struct VertexShaderInput
 {
-	float4 Position : SV_POSITION;
-	float3 Normal : NORMAL;
-	float2 TextureCoordinate : TEXCOORD0;
+	float4 Position : POSITION0;
 };
 
 struct VertexShaderOutput
 {
-	float4 Position : SV_POSITION;
-	float3 Normal : NORMAL;
-	float2 TextureCoordinate : TEXCOORD0;
-	float3 WorldPosition : POSITION1;
+	float4 Position : POSITION0;
+	float3 TextureCoordinate : TEXCOORD0;
 };
 
-float4 Diffuse(float3 N, float3 L, float4 colorLight, float distanceIntensity)
+VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
-	float lightIntensity = saturate(dot(N, L));
-	return colorLight * DiffuseIntensity * lightIntensity*distanceIntensity; // Ilight*Kd*<N,L>
-}
-
-float4 SpecPhong(float3 N, float3 L, float3 V, float4 colorLight, float distanceIntensity)
-{
-	float3 R = normalize(2 * dot(L, N) * N - L);
-	float4 dotProduct = saturate(dot(R, V));
-	float4 specular = SpecularIntensity * colorLight * pow(dotProduct, Shininess)*distanceIntensity; //Kr*Ilight*<R,V>^m
-	return specular;
-}
-
-VertexShaderOutput TexturedVS(in VertexShaderInput input)
-{
-	VertexShaderOutput output = (VertexShaderOutput)0;
+	VertexShaderOutput output;
 
 	float4 worldPosition = mul(input.Position, World);
 	float4 viewPosition = mul(worldPosition, View);
-	float3 normal = normalize(mul(input.Normal, World));
-	output.Normal = normal;
 	output.Position = mul(viewPosition, Projection);
-	output.WorldPosition = worldPosition.xyz;
-	output.TextureCoordinate = input.TextureCoordinate;
+
+	output.TextureCoordinate = mul(worldPosition - CameraPosition, Rotation);
+
 	return output;
 }
 
-float4 TexturedPS(VertexShaderOutput input) : COLOR
+float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-	float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
-	textureColor.a = 1;
-	float4 resultColor = textureColor * 0.8;
-
-	return resultColor;
+	return texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate));
 }
 
-technique Textured
+technique Colored
 {
 	pass Pass1
 	{
-		VertexShader = compile VS_SHADERMODEL TexturedVS();
-		PixelShader = compile PS_SHADERMODEL TexturedPS();
+		VertexShader = compile VS_SHADERMODEL VertexShaderFunction();
+		PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
 	}
-};
+}
