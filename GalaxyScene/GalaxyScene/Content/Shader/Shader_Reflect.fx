@@ -11,6 +11,7 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
+float4x4 Rotation;
 float4 MaterialColor;
 texture ModelTexture;
 float3 CameraPosition;
@@ -66,17 +67,17 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	output.Position = mul(viewPosition, Projection);
 
 	float4 VertexPosition = mul(input.Position, World);
-	float3 ViewDirection = CameraPosition - VertexPosition;
+	float3 ViewDirection = CameraPosition - worldPosition;
 
 	float3 Normal = normalize(mul(input.Normal, WorldInverseTranspose));
-	output.Reflection = reflect(-normalize(ViewDirection), normalize(Normal));
+	output.Reflection = mul(reflect(-normalize(ViewDirection), normalize(Normal)), Rotation);
 
 	return output;
 }
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-	return 0.75f * MaterialColor + 0.25f * texCUBE(SkyboxSampler, normalize(input.Reflection));
+	return 0.70f * MaterialColor + 0.3f * texCUBE(SkyboxSampler, normalize(input.Reflection));
 }
 
 technique Reflection

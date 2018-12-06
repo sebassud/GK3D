@@ -13,6 +13,7 @@ namespace GalaxyScene.Components
         private Matrix _world;
         private Model _model;
         private TextureCube _textureReflect;
+        private Matrix _rotation;
 
         public ReflectComponent(Game game) : base(game)
         {
@@ -20,8 +21,9 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            _world = Matrix.CreateScale(0.005f) *
-                Matrix.CreateTranslation(new Vector3(1, 0, 7)) * Matrix.CreateScale(gameService.Scale);
+            _world = Matrix.CreateScale(0.01f) *
+                Matrix.CreateTranslation(new Vector3(0, 0, 7)) * Matrix.CreateScale(gameService.Scale);
+            _rotation = Matrix.CreateRotationX(-MathHelper.PiOver2);
             base.Initialize();
         }
 
@@ -52,6 +54,7 @@ namespace GalaxyScene.Components
                     effect.Parameters["WorldInverseTranspose"].SetValue(
                                     Matrix.Transpose(Matrix.Invert(_world * mesh.ParentBone.Transform)));
                     effect.CurrentTechnique = effect.Techniques["Reflection"];
+                    part.Effect.Parameters["Rotation"].SetValue(_rotation);
                     part.Effect = effect;
                 }
 
