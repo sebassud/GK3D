@@ -9,32 +9,37 @@ namespace GalaxyScene.Render
 {
     public class Particle
     {
-        public int StartTTL { get; set; }
+        private int startTTL { get; set; }
+        private int maxTTL { get; set; }
+        private float scaleGlobal { get; set; }
+        private int tTL { get; set; }
+        private Vector3 velocity { get; set; }
         public Vector3 Position { get; set; }
-        public Vector3 Velocity { get; set; }
-        public int TTL { get; set; }
-        public int MaxTTL { get; set; }
-        public float Rotation { get; set; }
-        public float Scale { get; set; }
-        public float Time => (TTL + (MaxTTL - StartTTL)) / (float)MaxTTL;
+        public float Scale
+        {
+            get
+            {
+                return (float)tTL / startTTL;
+            }
+        }
+        public float Time => (tTL + (maxTTL - startTTL)) / (float)maxTTL;
 
-        public Particle(Vector3 position, Vector3 velocity, int tTL, int maxTTL, float rotation, float scale)
+        public Particle(Vector3 position, Vector3 velocity, int tTL, int maxTTL, float scale)
         {
             Position = position;
-            Velocity = velocity;
-            TTL = tTL;
-            StartTTL = tTL;
-            MaxTTL = maxTTL;
-            Rotation = rotation;
-            Scale = scale;
+            this.velocity = velocity;
+            this.tTL = tTL;
+            startTTL = tTL;
+            this.maxTTL = maxTTL;
+            scaleGlobal = scale;
         }
 
         public bool Update()
         {
-            Velocity = Velocity - Vector3.Normalize(Position) * Scale * 0.001f;
-            Position += Velocity * Scale;
-            TTL--;
-            return TTL > 0;
+            velocity = velocity - Vector3.Normalize(Position) * scaleGlobal * 0.002f;
+            Position += velocity * scaleGlobal;
+            tTL--;
+            return tTL > 0;
         }
     }
 }

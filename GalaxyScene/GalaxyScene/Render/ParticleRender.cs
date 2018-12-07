@@ -14,6 +14,10 @@ namespace GalaxyScene.Render
 
         private List<ParticleVertex> list_vertex;
 
+        private readonly int numberTextures = 16;
+        private readonly int numberColumn = 4;
+        private readonly int numberRow = 4;
+
         public ParticleRender()
         {
             list_vertex = new List<ParticleVertex>();           
@@ -23,19 +27,19 @@ namespace GalaxyScene.Render
         {
             ParticleVertex[] billboardVertices = new ParticleVertex[6];
 
-            var scale = (float)particle.TTL / particle.StartTTL;
+            var scale = particle.Scale;
             var time = particle.Time;
-            int k = 16 - (int)Math.Round(time * 16, MidpointRounding.AwayFromZero);
-            int y = k / 4;
-            int x = k % 4;
+            int k = numberTextures - (int)Math.Round(time * numberTextures, MidpointRounding.AwayFromZero);
+            int y = k / numberColumn;
+            int x = k % numberColumn;
             var coordinates = GetCoordinatesTexture(x, y);
-            var ratio = 1 - Math.Abs(k - (16 - time * 16));
-            if (k < 16 - time * 16)
+            var ratio = 1 - Math.Abs(k - numberTextures * (1 - time));
+            if (k < numberTextures * (1 - time))
                 k++;
             else
                 k--;
-            y = k / 4;
-            x = k % 4;
+            y = k / numberColumn;
+            x = k % numberColumn;
             var coordinates2 = GetCoordinatesTexture(x, y);
 
             billboardVertices[0] = new ParticleVertex(particle.Position, new Vector2(0, 0), new Vector2(coordinates.Item1.X, coordinates.Item1.Y),
@@ -69,7 +73,7 @@ namespace GalaxyScene.Render
 
         private Tuple<Vector2, Vector2> GetCoordinatesTexture(int x, int y)
         {
-            return new Tuple<Vector2, Vector2>(new Vector2(x * 0.25f, y * 0.25f), new Vector2((x + 1) * 0.25f, (y + 1) * 0.25f));
+            return new Tuple<Vector2, Vector2>(new Vector2(x * ((float)1 / numberRow), y * ((float)1 / numberColumn)), new Vector2((x + 1) * ((float)1 / numberRow), (y + 1) * ((float)1 / numberColumn)));
         }
     }
 }

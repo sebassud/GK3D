@@ -27,12 +27,12 @@ namespace GalaxyScene.Components
             var _rand = new Random();
             _world = Matrix.Identity;
             positions = new List<Vector3>();
-            var center = new Vector3(0, 8, 6);
-            for(int i=0; i < 50; i++)
+            var center = new Vector3(0, 10, 0);
+            for(int i=0; i < 100; i++)
             {
-                var x = center.X + 2 * ((float)_rand.NextDouble() - 0.5f);
-                var y = center.Y + 2 * ((float)_rand.NextDouble() - 0.5f);
-                var z = center.Z + 2 * ((float)_rand.NextDouble() - 0.5f);
+                var x = center.X + 4 * ((float)_rand.NextDouble() - 0.5f);
+                var y = center.Y + 4 * ((float)_rand.NextDouble() - 0.5f);
+                var z = center.Z + 8 * ((float)_rand.NextDouble() - 0.5f);
                 positions.Add(new Vector3(x, y, z));
             }
             

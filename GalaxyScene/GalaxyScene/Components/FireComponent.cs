@@ -27,7 +27,7 @@ namespace GalaxyScene.Components
         {
             _world = Matrix.Identity;
             Vector3 pos = new Vector3(-0.4f, 0.1f, 5);
-            _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 300);
+            _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 500, 0.02f);
             _particleRender = new ParticleRender();
             base.Initialize();
         }
@@ -62,7 +62,7 @@ namespace GalaxyScene.Components
             effectParticle.Parameters["xCamPos"].SetValue(gameService.Player.PlayerPosition);
             effectParticle.Parameters["xAllowedRotDir"].SetValue(gameService.Player.UpDirection);
             effectParticle.Parameters["xBillboardTexture"].SetValue(textureParticle);
-            effectParticle.Parameters["scale"].SetValue(_particleSystem.Particles[0].Scale);
+            effectParticle.Parameters["scale"].SetValue(_particleSystem.Scale);
 
             Game.GraphicsDevice.BlendState = BlendState.AlphaBlend;
             Game.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
