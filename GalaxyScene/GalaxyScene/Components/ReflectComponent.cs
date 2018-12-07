@@ -21,8 +21,8 @@ namespace GalaxyScene.Components
 
         public override void Initialize()
         {
-            _world = Matrix.CreateScale(0.01f) *
-                Matrix.CreateTranslation(new Vector3(0, 0, 7)) * Matrix.CreateScale(gameService.Scale);
+            _world = Matrix.CreateScale(0.03f) * Matrix.CreateScale(gameService.Scale) *
+                Matrix.CreateTranslation(new Vector3(-10, -10, 10));
             _rotation = Matrix.CreateRotationX(-MathHelper.PiOver2);
             base.Initialize();
         }
