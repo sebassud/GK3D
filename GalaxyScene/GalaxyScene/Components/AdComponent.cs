@@ -14,6 +14,7 @@ namespace GalaxyScene.Components
         private Matrix _world;
         private Model _model;
         private float _scale = 1f;
+        private Matrix _textureScale;
         private bool pressingMinus = false;
         private bool pressingPlus = false;
 
@@ -25,6 +26,7 @@ namespace GalaxyScene.Components
         {
             _world = Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateRotationY(-0.15f) * Matrix.CreateScale(0.001f) *
                 Matrix.CreateTranslation(new Vector3(-1, 0, 5)) * Matrix.CreateScale(gameService.Scale);
+            _textureScale = Matrix.CreateScale(-_scale) * Matrix.CreateTranslation(new Vector3(1, 0, 1));
             base.Initialize();
         }
 
@@ -58,6 +60,7 @@ namespace GalaxyScene.Components
             {
                 pressingPlus = false;
             }
+            _textureScale = Matrix.CreateScale(-_scale) * Matrix.CreateTranslation(new Vector3(1, 0, 1));
 
             base.Update(gameTime);
         }
@@ -73,7 +76,7 @@ namespace GalaxyScene.Components
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
                     effect.Parameters["SpecularIntensity"].SetValue(0.5f);
-                    effect.Parameters["Scale"].SetValue(_scale);
+                    effect.Parameters["TextureScale"].SetValue(_textureScale);
 
                     part.Effect = effect;
                 }

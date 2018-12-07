@@ -32,7 +32,7 @@ float3 PositionVectors[4];
 float4 ColorVectors[4];
 
 //
-float Scale = 1;
+float4x4 TextureScale;
 
 sampler2D textureSampler = sampler_state {
 	Texture = (ModelTexture);
@@ -97,7 +97,7 @@ VertexShaderOutput TexturedVS(in VertexShaderInput input)
 	output.Normal = normal;
 	output.Position = mul(viewPosition, Projection);
 	output.WorldPosition = worldPosition.xyz;
-	output.TextureCoordinate = input.TextureCoordinate;
+	output.TextureCoordinate = mul(normalize(input.Position), TextureScale).xz;
 	return output;
 }
 
@@ -108,10 +108,7 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 	float distanceIntensity = 1;
 	float2 uv = input.TextureCoordinate;
 	float4 textureColor;
-	if (uv.x >= 0.5 - Scale / 2 && uv.y >= 0.5 - Scale / 2 && uv.x <= 0.5 + Scale / 2 && uv.y <= 0.5 + Scale / 2)
-		textureColor = tex2D(textureSampler, (uv - (0.5 - Scale / 2)) / Scale);
-	else
-		textureColor = float4(1, 1, 1, 1);
+	textureColor = tex2D(textureSampler, input.TextureCoordinate);
 
 	textureColor.a = 1;
 	float4 resultColor = textureColor * AmbientIntensity;
