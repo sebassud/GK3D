@@ -12,9 +12,17 @@ namespace GalaxyScene.Components
     class MenuComponent : BaseComponent
     {
         GraphicsDeviceManager graphics;
+        private SpriteFont font;
+        SpriteBatch spriteBatch;
         private bool MagFilter;
         private bool MipFilter;
         private float MipMapLevelOfDetailBias;
+
+        private bool pressingM;
+        private bool pressingF3;
+        private bool pressingF4;
+        private bool pressingF5;
+        private bool pressingF6;
 
         public MenuComponent(Game game) : base(game)
         {
@@ -28,23 +36,90 @@ namespace GalaxyScene.Components
             MagFilter = true;
             MipFilter = true;
             MipMapLevelOfDetailBias = 1;
+            pressingM = false;
+            pressingF3 = false;
+            pressingF4 = false;
+            pressingF5 = false;
+            pressingF6 = false;
             SetFilters();
 
             base.Initialize();
         }
 
+        public override void LoadContent()
+        {
+            base.LoadContent();
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Game.Content.Load<SpriteFont>("Menu/Font");
+        }
+
         public override void Update(GameTime gameTime)
         {
             KeyboardState keyboard = Keyboard.GetState();
-            if (keyboard.GetPressedKeys().ToList().Exists(k => k == Keys.M))
+            if (keyboard.IsKeyDown(Keys.M) && !pressingM)
             {
                 graphics.PreferMultiSampling = !graphics.PreferMultiSampling;
-                Game.IsMouseVisible = !Game.IsMouseVisible;
                 graphics.ApplyChanges();
+                pressingM = true;
             }
+            if (keyboard.IsKeyUp(Keys.M))
+            {
+                pressingM = false;
+            }
+            if (keyboard.IsKeyDown(Keys.F3) && !pressingF3)
+            {
+                MagFilter = !MagFilter;
+                pressingF3 = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F3))
+            {
+                pressingF3 = false;
+            }
+            if (keyboard.IsKeyDown(Keys.F4) && !pressingF4)
+            {
+                MipFilter = !MipFilter;
+                pressingF4 = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F4))
+            {
+                pressingF4 = false;
+            }
+            if (keyboard.IsKeyDown(Keys.F5) && !pressingF5)
+            {
+                if(MipMapLevelOfDetailBias>-15) MipMapLevelOfDetailBias--;
+                pressingF5 = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F5))
+            {
+                pressingF5 = false;
+            }
+            if (keyboard.IsKeyDown(Keys.F6) && !pressingF6)
+            {
+                if (MipMapLevelOfDetailBias < 15) MipMapLevelOfDetailBias++;
+                pressingF6 = true;
+            }
+            if (keyboard.IsKeyUp(Keys.F6))
+            {
+                pressingF6 = false;
+            }
+
             SetFilters();
 
             base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            var magFilter = MagFilter ? "True" : "False";
+            var mipFilter = MipFilter ? "True" : "False";
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, $"MagFilter:{magFilter}", new Vector2(50, 50), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"MipFilter:{mipFilter}", new Vector2(50, 70), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"MipMapLevelOfDetailsBias :{MipMapLevelOfDetailBias}", new Vector2(50, 90), Color.WhiteSmoke);
+            spriteBatch.End();
         }
 
         private void SetFilters()

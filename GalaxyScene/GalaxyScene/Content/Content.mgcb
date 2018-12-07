@@ -130,6 +130,13 @@
 /processorParam:TextureFormat=Color
 /build:Fire/fire.png
 
+#begin Menu/Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Menu/Font.spritefont
+
 #begin Meteor/meteor.png
 /importer:TextureImporter
 /processor:TextureProcessor
