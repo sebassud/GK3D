@@ -43,7 +43,7 @@ namespace GalaxyScene.Components
             KeyboardState keyboard = Keyboard.GetState();
             if (keyboard.IsKeyDown(Keys.F1) && !pressingMinus)
             {
-                _scale -= 0.1f;
+                _scale += 0.1f;
                 pressingMinus = true;
             }
             if (keyboard.IsKeyUp(Keys.F1))
@@ -53,7 +53,7 @@ namespace GalaxyScene.Components
 
             if (keyboard.IsKeyDown(Keys.F2) && !pressingPlus)
             {
-                _scale += 0.1f;
+                _scale -= 0.1f;
                 pressingPlus = true;
             }
             if (keyboard.IsKeyUp(Keys.F2))
@@ -77,6 +77,7 @@ namespace GalaxyScene.Components
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
                     effect.Parameters["SpecularIntensity"].SetValue(0.5f);
                     effect.Parameters["TextureScale"].SetValue(_textureScale);
+                    part.Effect.Parameters["ModelTexture"].SetValue(gameService.TextureAd);
 
                     part.Effect = effect;
                 }

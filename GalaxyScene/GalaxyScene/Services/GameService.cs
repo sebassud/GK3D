@@ -1,6 +1,7 @@
 ﻿using GalaxyScene.GameModels;
 using GalaxyScene.Render;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,8 @@ namespace GalaxyScene.Services
         public List<Reflector> Reflectors { get; set; }
 
         public GraphicsDeviceManager Graphics { get; }
+
+        public Texture2D TextureAd { get; set; }
 
         #endregion
 

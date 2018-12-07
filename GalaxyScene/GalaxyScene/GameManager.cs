@@ -1,6 +1,7 @@
 ﻿using GalaxyScene.Components;
 using GalaxyScene.Services;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace GalaxyScene
     {
         private Game _game;
         private List<BaseComponent> _components;
+        private RenderTarget2D _renderTarget;
+        private GraphicsDevice GraphicsDevice;
+        private IGameService gameService;
 
         /// <summary>
         /// Konstruktor
@@ -21,7 +25,8 @@ namespace GalaxyScene
         public GameManager(Game game, GraphicsDeviceManager graphicsDeviceManager)
         {
             _game = game;
-            _game.Services.AddService(typeof(IGameService), new GameService(graphicsDeviceManager));
+            gameService = new GameService(graphicsDeviceManager);
+            _game.Services.AddService(typeof(IGameService), gameService);
         }
         /// <summary>
         /// Pobiera komponenty
@@ -46,6 +51,9 @@ namespace GalaxyScene
             {
                 component.Initialize();
             }
+            GraphicsDevice = _game.GraphicsDevice;
+            _renderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, true, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24Stencil8);
+            gameService.TextureAd = _renderTarget;
         }
         /// <summary>
         /// Ładuje komponenty
@@ -85,6 +93,14 @@ namespace GalaxyScene
         /// <param name="gameTime"></param>
         public void Draw(GameTime gameTime)
         {
+            GraphicsDevice.SetRenderTarget(_renderTarget);
+            foreach (var component in _components)
+            {
+                if (!(component is AdComponent))
+                    component.Draw(gameTime);
+            }
+
+            GraphicsDevice.SetRenderTarget(null);
             foreach (var component in _components)
             {
                 component.Draw(gameTime);

@@ -36,6 +36,7 @@ float4x4 TextureScale;
 
 sampler2D textureSampler = sampler_state {
 	Texture = (ModelTexture);
+	
 };
 
 struct VertexShaderInput

@@ -17,6 +17,7 @@ namespace GalaxyScene.Components
         private bool MagFilter;
         private bool MipFilter;
         private float MipMapLevelOfDetailBias;
+        private SamplerState _samplerState;
 
         private bool pressingM;
         private bool pressingF3;
@@ -115,11 +116,12 @@ namespace GalaxyScene.Components
             var magFilter = MagFilter ? "True" : "False";
             var mipFilter = MipFilter ? "True" : "False";
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, _samplerState, DepthStencilState.Default);
             spriteBatch.DrawString(font, $"MagFilter:{magFilter}", new Vector2(50, 50), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"MipFilter:{mipFilter}", new Vector2(50, 70), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"MipMapLevelOfDetailsBias :{MipMapLevelOfDetailBias}", new Vector2(50, 90), Color.WhiteSmoke);
             spriteBatch.End();
+            GraphicsDevice.BlendState = BlendState.Opaque;
         }
 
         private void SetFilters()
@@ -148,11 +150,11 @@ namespace GalaxyScene.Components
                 }
             }
 
-            var samplerState = new SamplerState();
-            samplerState.Filter = filter;
-            samplerState.FilterMode = TextureFilterMode.Default;
-            samplerState.MipMapLevelOfDetailBias = MipMapLevelOfDetailBias;
-            GraphicsDevice.SamplerStates[0] = samplerState;
+            _samplerState = new SamplerState();
+            _samplerState.Filter = filter;
+            _samplerState.FilterMode = TextureFilterMode.Default;
+            _samplerState.MipMapLevelOfDetailBias = MipMapLevelOfDetailBias;
+            GraphicsDevice.SamplerStates[0] = _samplerState;
         }
     }
 }

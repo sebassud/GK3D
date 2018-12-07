@@ -1,5 +1,6 @@
 ﻿using GalaxyScene.GameModels;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,7 @@ namespace GalaxyScene.Services
         List<Reflector> Reflectors { get; set; }
 
         GraphicsDeviceManager Graphics { get; }
+
+        Texture2D TextureAd { get; set; }
     }
 }
