@@ -114,12 +114,14 @@ namespace GalaxyScene.Components
             base.Draw(gameTime);
 
             var magFilter = MagFilter ? "True" : "False";
+            var preferMultisampling = graphics.PreferMultiSampling ? "True" : "False";
             var mipFilter = MipFilter ? "True" : "False";
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, _samplerState, DepthStencilState.Default);
             spriteBatch.DrawString(font, $"MagFilter:{magFilter}", new Vector2(50, 50), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"MipFilter:{mipFilter}", new Vector2(50, 70), Color.WhiteSmoke);
             spriteBatch.DrawString(font, $"MipMapLevelOfDetailsBias :{MipMapLevelOfDetailBias}", new Vector2(50, 90), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, $"MultiSampling :{preferMultisampling}", new Vector2(50, 110), Color.WhiteSmoke);
             spriteBatch.End();
             GraphicsDevice.BlendState = BlendState.Opaque;
         }
