@@ -47,6 +47,7 @@ namespace GalaxyScene.Components
             effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Direction).ToArray());
             effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Position).ToArray());
             effect.Parameters["ColorVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Color).ToArray());
+            effect.Parameters["DirectionLight"].SetValue(new Vector3(0, 0, 1));
 
             return effect;
         }
