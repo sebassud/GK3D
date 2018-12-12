@@ -42,7 +42,7 @@ namespace GalaxyScene.Components
         public override void LoadContent()
         {
             base.LoadContent();
-            _texture = Game.Content.Load<Texture2D>("Station/blueTent");
+            _texture = Game.Content.Load<Texture2D>("Station/texture-crush");
             _effect = GetEffect();
         }
 

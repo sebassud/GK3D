@@ -41,13 +41,18 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\AdComponent.cs" />
     <Compile Include="Components\BackgroundComponent.cs" />
     <Compile Include="Components\BaseComponent.cs" />
     <Compile Include="Components\BaseGameComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\ComDishComponent.cs" />
+    <Compile Include="Components\FireComponent.cs" />
+    <Compile Include="Components\MenuComponent.cs" />
+    <Compile Include="Components\MeteorComponent.cs" />
     <Compile Include="Components\PlanetoidComponent.cs" />
     <Compile Include="Components\PlayerComponent.cs" />
+    <Compile Include="Components\ReflectComponent.cs" />
     <Compile Include="Components\SatelliteComponent.cs" />
     <Compile Include="Components\SpaceshipComponent.cs" />
     <Compile Include="Components\StationComponent.cs" />
@@ -55,6 +60,10 @@
     <Compile Include="GameManager.cs" />
     <Compile Include="GameModels\Reflector.cs" />
     <Compile Include="GameModels\Player.cs" />
+    <Compile Include="Render\Particle.cs" />
+    <Compile Include="Render\ParticleRender.cs" />
+    <Compile Include="Render\ParticleSystem.cs" />
+    <Compile Include="Render\ParticleVertex.cs" />
     <Compile Include="Render\Projection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Shader\Shader.fx" />
+    <Content Include="Content\Shader\Shader_Ad.fx" />
+    <Content Include="Content\Shader\Shader_Billboard.fx" />
+    <Content Include="Content\Shader\Shader_Particle.fx" />
+    <Content Include="Content\Shader\Shader_background.fx" />
+    <Content Include="Content\Shader\Shader_Reflect.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

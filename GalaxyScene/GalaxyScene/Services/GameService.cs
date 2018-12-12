@@ -1,6 +1,7 @@
 ﻿using GalaxyScene.GameModels;
 using GalaxyScene.Render;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,14 +42,19 @@ namespace GalaxyScene.Services
         /// </summary>
         public List<Reflector> Reflectors { get; set; }
 
+        public GraphicsDeviceManager Graphics { get; }
+
+        public Texture2D TextureAd { get; set; }
+
         #endregion
 
-        public GameService()
+        public GameService(GraphicsDeviceManager graphics)
         {
             projection = new Projection();
             Player = new Player();
             Scale = 1;
             Reflectors = new List<Reflector>();
+            Graphics = graphics;
         }
     }
 }

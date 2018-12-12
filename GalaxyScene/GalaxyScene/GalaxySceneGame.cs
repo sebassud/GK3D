@@ -17,12 +17,12 @@ namespace GalaxyScene
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //graphics.PreferMultiSampling = true;
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.PreferredBackBufferWidth = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
             graphics.PreferredBackBufferHeight = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            //graphics.PreferMultiSampling = true;
 
-            gameManager = new GameManager(this);
+            gameManager = new GameManager(this, graphics);
         }
 
         /// <summary>
@@ -80,7 +80,6 @@ namespace GalaxyScene
             GraphicsDevice.Clear(Color.TransparentBlack);
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
             gameManager.Draw(gameTime);
 

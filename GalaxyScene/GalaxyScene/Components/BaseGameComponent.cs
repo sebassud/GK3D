@@ -10,15 +10,19 @@ namespace GalaxyScene.Components
 {
     public class BaseGameComponent : BaseComponent
     {
-        private Effect _effect;
+        private Dictionary<string, Effect> _effects;
 
         public BaseGameComponent(Game game) : base(game)
         {
+            _effects = new Dictionary<string, Effect>();
         }
 
         public override void LoadContent()
         {
-            _effect = Game.Content.Load<Effect>("Shader/Shader");
+            _effects.Add("Shader", Game.Content.Load<Effect>("Shader/Shader"));
+            _effects.Add("Shader_Ad", Game.Content.Load<Effect>("Shader/Shader_Ad"));
+            _effects.Add("Shader_background", Game.Content.Load<Effect>("Shader/Shader_background"));
+            _effects.Add("Shader_Reflect", Game.Content.Load<Effect>("Shader/Shader_Reflect"));
             base.LoadContent();
         }
 
@@ -27,9 +31,9 @@ namespace GalaxyScene.Components
             return FillParameter(effect);
         }
 
-        protected Effect GetEffect()
+        protected Effect GetEffect(string nameShader = "Shader")
         {
-            var effect = _effect.Clone();
+            var effect = _effects[nameShader].Clone();
 
             return FillParameter(effect);
         }
@@ -43,6 +47,7 @@ namespace GalaxyScene.Components
             effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Direction).ToArray());
             effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Position).ToArray());
             effect.Parameters["ColorVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Color).ToArray());
+            effect.Parameters["DirectionLight"].SetValue(new Vector3(0, 1, 1));
 
             return effect;
         }
@@ -51,7 +56,7 @@ namespace GalaxyScene.Components
         /// Ładowanie informacji z domyślnego efektu
         /// </summary>
         /// <param name="model">Model, dla którego ładowany jest efekt</param>
-        protected void LoadMesh(Model model)
+        protected void LoadMesh(Model model, string nameShader = "Shader")
         {
             foreach (ModelMesh mesh in model.Meshes)
             {
@@ -60,7 +65,7 @@ namespace GalaxyScene.Components
                     var basicEffect = part.Effect as BasicEffect;
                     if (basicEffect != null)
                     {
-                        var effect = _effect.Clone();
+                        var effect = _effects[nameShader].Clone();
 
                         if (basicEffect.Texture != null)
                         {
