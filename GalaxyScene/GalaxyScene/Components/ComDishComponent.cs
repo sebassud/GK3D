@@ -21,7 +21,7 @@ namespace GalaxyScene.Components
         public override void Initialize()
         {
             _world = Matrix.CreateRotationX(MathHelper.PiOver2) * Matrix.CreateRotationY(-0.1f) * Matrix.CreateScale(0.03f) *
-                Matrix.CreateTranslation(new Vector3(-0.5f, 0, 4.97f)) * Matrix.CreateScale(gameService.Scale);
+                Matrix.CreateTranslation(new Vector3(-0.5f, 1, 4.9f)) * Matrix.CreateScale(gameService.Scale);
             base.Initialize();
         }
 
@@ -54,6 +54,13 @@ namespace GalaxyScene.Components
                 mesh.Draw();
             }
             base.Draw(gameTime);
+        }
+
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            DrawShadowMapHelper(_model, _world);
         }
     }
 }

@@ -99,5 +99,14 @@ namespace GalaxyScene.Components
             }
             base.Draw(gameTime);
         }
+
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            DrawShadowMapHelper(_model, _world1);
+
+            DrawShadowMapHelper(_model, _world2);
+        }
     }
 }

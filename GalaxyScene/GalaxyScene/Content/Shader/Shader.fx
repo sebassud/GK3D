@@ -11,7 +11,7 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 float4 MaterialColor;
-texture ModelTexture;
+Texture2D ModelTexture2;
 float3 CameraPosition;
 //Diffuse
 float DiffuseIntensity = 0.75; //Kd
@@ -24,6 +24,10 @@ float AmbientIntensity = 0.05;
 //Direction
 float3 DirectionLight = float3(0, 1, 1);
 float4 DirectionColor = float4(1, 1, 1, 1);
+const float DepthBias = 0.02;
+float4x4 LightViewProj;
+float2 ShadowMapSize;
+Texture2D ShadowMap;
 //Reflectors
 float P = 8;
 int ReflectorsCount = 0;
@@ -32,7 +36,17 @@ float3 PositionVectors[4];
 float4 ColorVectors[4];
 
 sampler2D textureSampler = sampler_state {
-	Texture = (ModelTexture);
+	Texture = (ModelTexture2);
+};
+
+SamplerState ShadowMapSampler
+{
+	Texture = (ShadowMap);
+	MinFilter = point;
+	MagFilter = point;
+	MipFilter = point;
+	AddressU = Wrap;
+	AddressV = Wrap;
 };
 
 struct VertexShaderInput
@@ -47,7 +61,7 @@ struct VertexShaderOutput
 	float4 Position : SV_POSITION;
 	float3 Normal : NORMAL;
 	float2 TextureCoordinate : TEXCOORD0;
-	float3 WorldPosition : POSITION1;
+	float4 WorldPosition : POSITION1;
 };
 
 struct ColoredShaderInput
@@ -84,6 +98,29 @@ float4 SpecPhong(float3 N, float3 L, float3 V, float4 colorLight, float distance
 	return specular;
 }
 
+float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coord)
+{
+	float shadow_term = 0;
+
+	//float2 v_lerps = frac(ShadowMapSize * shadow_coord);
+
+	float variableBias = clamp(0.001 * tan(acos(ndotl)), 0, DepthBias);
+
+	//safe to assume it's a square
+	float size = 1 / ShadowMapSize.x;
+
+	float samples[4];
+	samples[0] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord).r);
+	samples[1] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(size, 0)).r);
+	samples[2] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(0, size)).r);
+	samples[3] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(size, size)).r);
+
+	shadow_term = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
+	//shadow_term = lerp(lerp(samples[0],samples[1],v_lerps.x),lerp(samples[2],samples[3],v_lerps.x),v_lerps.y);
+
+	return shadow_term;
+}
+
 VertexShaderOutput TexturedVS(in VertexShaderInput input)
 {
 	VertexShaderOutput output = (VertexShaderOutput)0;
@@ -93,7 +130,7 @@ VertexShaderOutput TexturedVS(in VertexShaderInput input)
 	float3 normal = normalize(mul(input.Normal, World));
 	output.Normal = normal;
 	output.Position = mul(viewPosition, Projection);
-	output.WorldPosition = worldPosition.xyz;
+	output.WorldPosition = worldPosition;
 	output.TextureCoordinate = input.TextureCoordinate;
 	return output;
 }
@@ -111,7 +148,19 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 	float3 L = normalize(DiffuseLightDirection);
 	float4 diffColor = Diffuse(N, L, DirectionColor, 1);
 	float4 specular = SpecPhong(N, L, V, DirectionColor, 1);
-	resultColor += saturate(textureColor * diffColor + specular);
+
+	float4 lightingPosition = mul(input.WorldPosition, LightViewProj);
+	// Find the position in the shadow map for this pixel
+	float2 ShadowTexCoord = mad(0.5f, lightingPosition.xy / lightingPosition.w, float2(0.5f, 0.5f));
+	ShadowTexCoord.y = 1.0f - ShadowTexCoord.y;
+
+	// Get the current depth stored in the shadow map
+	float ourdepth = (lightingPosition.z / lightingPosition.w);
+
+	float shadowContribution = CalcShadowTermPCF(ourdepth, saturate(dot(N, L)), ShadowTexCoord);
+
+
+	resultColor += saturate(textureColor * diffColor * shadowContribution + specular * shadowContribution);
 	saturate(resultColor);
 
 	for (int i = 0; i < ReflectorsCount; i++)

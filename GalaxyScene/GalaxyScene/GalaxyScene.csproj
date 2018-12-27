@@ -86,6 +86,7 @@
     <Content Include="Content\Shader\Shader_Particle.fx" />
     <Content Include="Content\Shader\Shader_background.fx" />
     <Content Include="Content\Shader\Shader_Reflect.fx" />
+    <Content Include="Content\Shader\Shader_ShadowMap.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

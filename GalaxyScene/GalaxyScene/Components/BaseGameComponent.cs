@@ -11,10 +11,15 @@ namespace GalaxyScene.Components
     public class BaseGameComponent : BaseComponent
     {
         private Dictionary<string, Effect> _effects;
+        protected Matrix lightViewProjection;
 
         public BaseGameComponent(Game game) : base(game)
         {
             _effects = new Dictionary<string, Effect>();
+            var lightView = Matrix.CreateLookAt(new Vector3(0, 20, 20),
+                        new Vector3(0, 0, 0),
+                        new Vector3(0, 0, 1));
+            lightViewProjection = lightView * gameService.ProjectionOrthographic;
         }
 
         public override void LoadContent()
@@ -23,6 +28,7 @@ namespace GalaxyScene.Components
             _effects.Add("Shader_Ad", Game.Content.Load<Effect>("Shader/Shader_Ad"));
             _effects.Add("Shader_background", Game.Content.Load<Effect>("Shader/Shader_background"));
             _effects.Add("Shader_Reflect", Game.Content.Load<Effect>("Shader/Shader_Reflect"));
+            _effects.Add("Shader_ShadowMap", Game.Content.Load<Effect>("Shader/Shader_ShadowMap"));
             base.LoadContent();
         }
 
@@ -43,6 +49,9 @@ namespace GalaxyScene.Components
             effect.Parameters["View"].SetValue(gameService.View);
             effect.Parameters["Projection"].SetValue(gameService.Projection);
             effect.Parameters["CameraPosition"].SetValue(gameService.Player.PlayerPosition);
+            effect.Parameters["ShadowMap"]?.SetValue(gameService.ShadowMap);
+            effect.Parameters["LightViewProj"]?.SetValue(lightViewProjection);
+            effect.Parameters["ShadowMapSize"]?.SetValue(new Vector2(4 * GraphicsDevice.PresentationParameters.BackBufferWidth, 4 * GraphicsDevice.PresentationParameters.BackBufferHeight));
             effect.Parameters["ReflectorsCount"].SetValue(gameService.Reflectors.Where(x => x.Active).Count());
             effect.Parameters["DirectionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Direction).ToArray());
             effect.Parameters["PositionVectors"].SetValue(gameService.Reflectors.Where(x => x.Active).Select(x => x.Position).ToArray());
@@ -70,7 +79,7 @@ namespace GalaxyScene.Components
                         if (basicEffect.Texture != null)
                         {
                             effect.CurrentTechnique = effect.Techniques["Textured"];
-                            effect.Parameters["ModelTexture"].SetValue(basicEffect.Texture);
+                            effect.Parameters["ModelTexture2"].SetValue(basicEffect.Texture);
                         }
                         else
                         {
@@ -84,6 +93,32 @@ namespace GalaxyScene.Components
                 }
             }
 
+        }
+
+        protected void DrawShadowMapHelper(Model model, Matrix world)
+        {
+            var shadowMapGenerate = _effects["Shader_ShadowMap"];
+            for (int index = 0; index < model.Meshes.Count; index++)
+            {
+                ModelMesh mesh = model.Meshes[index];
+                for (int i = 0; i < mesh.MeshParts.Count; i++)
+                {
+                    ModelMeshPart meshpart = mesh.MeshParts[i];
+                    shadowMapGenerate.Parameters["WorldViewProj"].SetValue(world * lightViewProjection);
+
+                    shadowMapGenerate.CurrentTechnique.Passes[0].Apply();
+
+                    GraphicsDevice.SetVertexBuffer(meshpart.VertexBuffer);
+                    GraphicsDevice.Indices = (meshpart.IndexBuffer);
+                    int primitiveCount = meshpart.PrimitiveCount;
+                    int vertexOffset = meshpart.VertexOffset;
+                    int vCount = meshpart.NumVertices;
+                    int startIndex = meshpart.StartIndex;
+
+                    GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, vertexOffset, startIndex,
+                        primitiveCount);
+                }
+            }
         }
     }
 }

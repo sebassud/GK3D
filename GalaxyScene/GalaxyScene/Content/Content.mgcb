@@ -259,6 +259,12 @@
 /processorParam:DebugMode=Auto
 /build:Shader/Shader_Reflect.fx
 
+#begin Shader/Shader_ShadowMap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shader/Shader_ShadowMap.fx
+
 #begin Spaceship/Plating.png
 /importer:TextureImporter
 /processor:TextureProcessor
