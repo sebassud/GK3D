@@ -28,6 +28,7 @@ const float DepthBias = 0.02;
 float4x4 LightViewProj;
 float2 ShadowMapSize;
 Texture2D ShadowMap;
+bool DrawShadow = true;
 //Reflectors
 float P = 8;
 int ReflectorsCount = 0;
@@ -102,7 +103,6 @@ float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coor
 {
 	float shadow_term = 0;
 
-	//float2 v_lerps = frac(ShadowMapSize * shadow_coord);
 
 	float variableBias = clamp(0.001 * tan(acos(ndotl)), 0, DepthBias);
 
@@ -116,7 +116,6 @@ float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coor
 	samples[3] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(size, size)).r);
 
 	shadow_term = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
-	//shadow_term = lerp(lerp(samples[0],samples[1],v_lerps.x),lerp(samples[2],samples[3],v_lerps.x),v_lerps.y);
 
 	return shadow_term;
 }
@@ -149,16 +148,19 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 	float4 diffColor = Diffuse(N, L, DirectionColor, 1);
 	float4 specular = SpecPhong(N, L, V, DirectionColor, 1);
 
-	float4 lightingPosition = mul(input.WorldPosition, LightViewProj);
-	// Find the position in the shadow map for this pixel
-	float2 ShadowTexCoord = mad(0.5f, lightingPosition.xy / lightingPosition.w, float2(0.5f, 0.5f));
-	ShadowTexCoord.y = 1.0f - ShadowTexCoord.y;
 
-	// Get the current depth stored in the shadow map
-	float ourdepth = (lightingPosition.z / lightingPosition.w);
+	float shadowContribution = 1;
+	if (DrawShadow) {
+		float4 lightingPosition = mul(input.WorldPosition, LightViewProj);
+		// Find the position in the shadow map for this pixel
+		float2 ShadowTexCoord = mad(0.5f, lightingPosition.xy / lightingPosition.w, float2(0.5f, 0.5f));
+		ShadowTexCoord.y = 1.0f - ShadowTexCoord.y;
 
-	float shadowContribution = CalcShadowTermPCF(ourdepth, saturate(dot(N, L)), ShadowTexCoord);
+		// Get the current depth stored in the shadow map
+		float ourdepth = (lightingPosition.z / lightingPosition.w);
 
+		shadowContribution = CalcShadowTermPCF(ourdepth, saturate(dot(N, L)), ShadowTexCoord) + 0.1f;
+	}
 
 	resultColor += saturate(textureColor * diffColor * shadowContribution + specular * shadowContribution);
 	saturate(resultColor);

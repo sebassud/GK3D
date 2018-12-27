@@ -80,6 +80,7 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world1);
+                    effect.Parameters["DrawShadow"].SetValue(false);
                     part.Effect = effect;
                 }
 
@@ -92,6 +93,7 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world2);
+                    effect.Parameters["DrawShadow"].SetValue(false);
                     part.Effect = effect;
                 }
 

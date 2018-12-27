@@ -11,7 +11,7 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 float4 MaterialColor;
-texture ModelTexture;
+texture ModelTexture2;
 float3 CameraPosition;
 //Diffuse
 float DiffuseIntensity = 0.75; //Kd
@@ -35,7 +35,7 @@ float4 ColorVectors[4];
 float4x4 TextureScale;
 
 sampler2D textureSampler = sampler_state {
-	Texture = (ModelTexture);
+	Texture = (ModelTexture2);
 	
 };
 

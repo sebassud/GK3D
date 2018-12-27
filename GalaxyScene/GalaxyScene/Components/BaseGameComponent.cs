@@ -16,10 +16,10 @@ namespace GalaxyScene.Components
         public BaseGameComponent(Game game) : base(game)
         {
             _effects = new Dictionary<string, Effect>();
-            var lightView = Matrix.CreateLookAt(new Vector3(0, 20, 20),
+            var lightView = Matrix.CreateLookAt(new Vector3(0, 30, 40),
                         new Vector3(0, 0, 0),
                         new Vector3(0, 0, 1));
-            lightViewProjection = lightView * gameService.ProjectionOrthographic;
+            lightViewProjection = lightView * gameService.ProjectionLight;
         }
 
         public override void LoadContent()

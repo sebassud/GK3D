@@ -13,7 +13,7 @@ namespace GalaxyScene.Services
     {
         Matrix Projection { get; }
 
-        Matrix ProjectionOrthographic { get; }
+        Matrix ProjectionLight { get; }
 
         Matrix View { get; set; }
 

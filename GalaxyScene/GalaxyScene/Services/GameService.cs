@@ -48,7 +48,7 @@ namespace GalaxyScene.Services
 
         public Texture2D ShadowMap { get; set; }
 
-        public Matrix ProjectionOrthographic
+        public Matrix ProjectionLight
         {
             get
             {

@@ -77,7 +77,7 @@ namespace GalaxyScene.Components
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world);
                     effect.Parameters["SpecularIntensity"].SetValue(0.5f);
                     effect.Parameters["TextureScale"].SetValue(_textureScale);
-                    part.Effect.Parameters["ModelTexture"].SetValue(gameService.TextureAd);
+                    part.Effect.Parameters["ModelTexture2"].SetValue(gameService.TextureAd);
 
                     part.Effect = effect;
                 }
@@ -85,6 +85,13 @@ namespace GalaxyScene.Components
                 mesh.Draw();
             }
             base.Draw(gameTime);
+        }
+
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            DrawShadowMapHelper(_model, _world);
         }
     }
 }
