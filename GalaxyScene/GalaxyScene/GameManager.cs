@@ -57,7 +57,7 @@ namespace GalaxyScene
             GraphicsDevice = _game.GraphicsDevice;
             _renderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, true, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24Stencil8);
             gameService.TextureAd = _renderTarget;
-            shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, 4 * GraphicsDevice.PresentationParameters.BackBufferWidth, 4 * GraphicsDevice.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Single, DepthFormat.Depth24Stencil8);
+            shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, 4 * GraphicsDevice.PresentationParameters.BackBufferWidth, 4 * GraphicsDevice.PresentationParameters.BackBufferHeight, true, SurfaceFormat.Rg32, DepthFormat.Depth24Stencil8);
             gameService.ShadowMap = shadowMapRenderTarget;
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }

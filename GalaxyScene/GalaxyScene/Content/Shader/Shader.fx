@@ -103,21 +103,37 @@ float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coor
 {
 	float shadow_term = 0;
 
-
 	float variableBias = clamp(0.001 * tan(acos(ndotl)), 0, DepthBias);
 
 	//safe to assume it's a square
-	float size = 1 / ShadowMapSize.x;
+	float sizex = 1 / ShadowMapSize.x;
+	float sizey = 1 / ShadowMapSize.y;
 
 	float samples[4];
 	samples[0] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord).r);
-	samples[1] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(size, 0)).r);
-	samples[2] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(0, size)).r);
-	samples[3] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(size, size)).r);
+	samples[1] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(sizex, 0)).r);
+	samples[2] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(0, sizey)).r);
+	samples[3] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(sizex, sizey)).r);
 
 	shadow_term = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
 
 	return shadow_term;
+}
+
+float CalcShadowTermVariance(float light_space_depth, float2 shadow_coord)
+{
+	float2 moments = ShadowMap.Sample(ShadowMapSampler, shadow_coord).rg;
+	if (light_space_depth <= moments.x)
+		return 1.0;
+
+	float p = step(light_space_depth, moments.x);
+	float variance = moments.y - (moments.x*moments.x);
+	variance = max(variance, 0.00002);
+
+	float d = light_space_depth - moments.x;
+	float p_max = variance / (variance + d*d);
+
+	return max(p_max, p);
 }
 
 VertexShaderOutput TexturedVS(in VertexShaderInput input)
@@ -152,14 +168,12 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 	float shadowContribution = 1;
 	if (DrawShadow) {
 		float4 lightingPosition = mul(input.WorldPosition, LightViewProj);
-		// Find the position in the shadow map for this pixel
 		float2 ShadowTexCoord = mad(0.5f, lightingPosition.xy / lightingPosition.w, float2(0.5f, 0.5f));
 		ShadowTexCoord.y = 1.0f - ShadowTexCoord.y;
 
-		// Get the current depth stored in the shadow map
 		float ourdepth = (lightingPosition.z / lightingPosition.w);
 
-		shadowContribution = CalcShadowTermPCF(ourdepth, saturate(dot(N, L)), ShadowTexCoord) + 0.1f;
+		shadowContribution = CalcShadowTermVariance(ourdepth, ShadowTexCoord);
 	}
 
 	resultColor += saturate(textureColor * diffColor * shadowContribution + specular * shadowContribution);

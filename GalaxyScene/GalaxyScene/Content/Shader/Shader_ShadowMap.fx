@@ -27,7 +27,12 @@ CreateShadowMap_VSOut CreateShadowMap_VertexShader(float4 Position : SV_POSITION
 
 float4 CreateShadowMap_PixelShader(CreateShadowMap_VSOut input) : COLOR
 {
-	return input.Depth;
+	float Z = input.Depth;
+	float Z2 = input.Depth * input.Depth;
+	float bias = 0.25f*(ddx(Z) * ddx(Z) + ddy(Z) * ddy(Z));
+	float M = Z;
+	float M2 = Z2 + bias;
+	return float4(M, M2, 0 , 1);
 }
 
 // Technique for creating the shadow map
