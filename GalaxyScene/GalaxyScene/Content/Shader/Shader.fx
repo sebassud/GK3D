@@ -99,30 +99,8 @@ float4 SpecPhong(float3 N, float3 L, float3 V, float4 colorLight, float distance
 	return specular;
 }
 
-float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coord)
+float CalcShadowTermVariance(float light_space_depth, float2 moments)
 {
-	float shadow_term = 0;
-
-	float variableBias = clamp(0.001 * tan(acos(ndotl)), 0, DepthBias);
-
-	//safe to assume it's a square
-	float sizex = 1 / ShadowMapSize.x;
-	float sizey = 1 / ShadowMapSize.y;
-
-	float samples[4];
-	samples[0] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord).r);
-	samples[1] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(sizex, 0)).r);
-	samples[2] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(0, sizey)).r);
-	samples[3] = (light_space_depth - variableBias < ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(sizex, sizey)).r);
-
-	shadow_term = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
-
-	return shadow_term;
-}
-
-float CalcShadowTermVariance(float light_space_depth, float2 shadow_coord)
-{
-	float2 moments = ShadowMap.Sample(ShadowMapSampler, shadow_coord).rg;
 	if (light_space_depth <= moments.x)
 		return 1.0;
 
@@ -134,6 +112,34 @@ float CalcShadowTermVariance(float light_space_depth, float2 shadow_coord)
 	float p_max = variance / (variance + d*d);
 
 	return max(p_max, p);
+}
+
+float CalcShadowTermPCF(float light_space_depth, float ndotl, float2 shadow_coord)
+{
+	float shadow_term = 0;
+
+	float variableBias = clamp(0.001 * tan(acos(ndotl)), 0, DepthBias);
+
+	float sizex = 1 / ShadowMapSize.x;
+	float sizey = 1 / ShadowMapSize.y;
+
+	float samples_result = 0;
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			float2 moments = ShadowMap.Sample(ShadowMapSampler, shadow_coord + float2(i*sizex, j*sizey)).rg;
+			//if (light_space_depth - variableBias < moments.x) 
+			{
+				samples_result += CalcShadowTermVariance(light_space_depth, moments);
+			}
+		}
+	}
+
+	shadow_term = samples_result / 4;
+
+	return shadow_term;
 }
 
 VertexShaderOutput TexturedVS(in VertexShaderInput input)
@@ -173,7 +179,7 @@ float4 TexturedPS(VertexShaderOutput input) : COLOR
 
 		float ourdepth = (lightingPosition.z / lightingPosition.w);
 
-		shadowContribution = CalcShadowTermVariance(ourdepth, ShadowTexCoord);
+		shadowContribution = CalcShadowTermPCF(ourdepth, saturate(dot(N, L)), ShadowTexCoord);
 	}
 
 	resultColor += saturate(textureColor * diffColor * shadowContribution + specular * shadowContribution);
