@@ -38,5 +38,10 @@ namespace GalaxyScene.Components
         {
             base.UnloadContent();
         }
+
+        public virtual void DrawShadowMap()
+        {
+            
+        }
     }
 }

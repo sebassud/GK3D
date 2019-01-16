@@ -46,6 +46,16 @@ namespace GalaxyScene.Services
 
         public Texture2D TextureAd { get; set; }
 
+        public Texture2D ShadowMap { get; set; }
+
+        public Matrix ProjectionLight
+        {
+            get
+            {
+                return projection.MatrixOrthographic;
+            }
+        }
+
         #endregion
 
         public GameService(GraphicsDeviceManager graphics)

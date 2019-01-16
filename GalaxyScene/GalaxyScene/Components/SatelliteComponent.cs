@@ -80,6 +80,7 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world1);
+                    effect.Parameters["DrawShadow"].SetValue(false);
                     part.Effect = effect;
                 }
 
@@ -92,12 +93,22 @@ namespace GalaxyScene.Components
                 {
                     var effect = GetEffect(part.Effect);
                     effect.Parameters["World"].SetValue(modelTransforms[mesh.ParentBone.Index] * _world2);
+                    effect.Parameters["DrawShadow"].SetValue(false);
                     part.Effect = effect;
                 }
 
                 mesh.Draw();
             }
             base.Draw(gameTime);
+        }
+
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            DrawShadowMapHelper(_model, _world1);
+
+            DrawShadowMapHelper(_model, _world2);
         }
     }
 }

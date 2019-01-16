@@ -25,6 +25,8 @@ namespace GalaxyScene.Render
         /// </summary>
         public Matrix MatrixProjection { get; private set; }
 
+        public Matrix MatrixOrthographic { get; private set; }
+
         public Projection(int preferredBackBufferWidth = 1920, int preferredBackBufferHeight = 1080)
         {
             Update(preferredBackBufferWidth, preferredBackBufferHeight);
@@ -39,6 +41,7 @@ namespace GalaxyScene.Render
             PreferredBackBufferHeight = preferredBackBufferHeight;
             PreferredBackBufferWidth = preferredBackBufferWidth;
             MatrixProjection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), preferredBackBufferWidth / (float)preferredBackBufferHeight, 0.01f, 2000);
+            MatrixOrthographic = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), preferredBackBufferWidth / (float)preferredBackBufferHeight, 10f, 50);
         }
     }
 }

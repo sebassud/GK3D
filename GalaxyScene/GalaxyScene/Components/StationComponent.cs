@@ -24,6 +24,7 @@ namespace GalaxyScene.Components
         private Matrix _world2;
         private Matrix _world3;
         private Effect _effect;
+        private Effect _effect2;
 
         public StationComponent(Game game) : base(game)
         {
@@ -33,8 +34,8 @@ namespace GalaxyScene.Components
         {
             HalfSphere(0.3f, 64);
             HalfSphere2(0.1f, 64);
-            _world1 = Matrix.CreateTranslation(new Vector3(0, -0.4f, 4.9f)) * Matrix.CreateScale(gameService.Scale);
-            _world2 = Matrix.CreateTranslation(new Vector3(0, 0.4f, 4.9f)) * Matrix.CreateScale(gameService.Scale);
+            _world1 = Matrix.CreateTranslation(new Vector3(-0.2f, 0, 4.9f)) * Matrix.CreateScale(gameService.Scale);
+            _world2 = Matrix.CreateTranslation(new Vector3(0.2f, 0, 4.9f)) * Matrix.CreateScale(gameService.Scale);
             _world3 = Matrix.CreateTranslation(new Vector3(0, 0, 4.99f)) * Matrix.CreateScale(gameService.Scale);
             base.Initialize();
         }
@@ -44,6 +45,7 @@ namespace GalaxyScene.Components
             base.LoadContent();
             _texture = Game.Content.Load<Texture2D>("Station/texture-crush");
             _effect = GetEffect();
+            _effect2 = Game.Content.Load<Effect>("Shader/Shader_ShadowMap");
         }
 
         private void HalfSphere(float radius, int slices)
@@ -118,8 +120,8 @@ namespace GalaxyScene.Components
 
                 for (int slicePhi = 0; slicePhi < (slices + 1); slicePhi++)
                 {
-                    float x = r * (float)Math.Sin(slicePhi * phiStep);
-                    float y = 2 * r * (float)Math.Cos(slicePhi * phiStep);
+                    float x = 2 * r * (float)Math.Sin(slicePhi * phiStep);
+                    float y = r * (float)Math.Cos(slicePhi * phiStep);
 
                     vertices[iVertex].Position = new Vector3(x, y, z) * radius;
                     vertices[iVertex].Normal = Vector3.Normalize(new Vector3(x, y, z));
@@ -155,7 +157,7 @@ namespace GalaxyScene.Components
             device.SetVertexBuffer(_vertexBuf);
 
             var effect = GetEffect(_effect);
-            effect.Parameters["ModelTexture"].SetValue(_texture);
+            effect.Parameters["ModelTexture2"].SetValue(_texture);
             effect.CurrentTechnique = effect.Techniques["Textured"];
 
             effect.Parameters["World"].SetValue(_world1);
@@ -171,14 +173,32 @@ namespace GalaxyScene.Components
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
             }
+        }
 
-            device.Indices = _indexBuf2;
-            device.SetVertexBuffer(_vertexBuf2);
-            effect.Parameters["World"].SetValue(_world3);
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            GraphicsDevice device = Game.GraphicsDevice;
+            device.Indices = _indexBuf;
+            device.SetVertexBuffer(_vertexBuf);
+
+
+            var effect = _effect2;
+            effect.Parameters["WorldViewProj"].SetValue(_world1 * lightViewProjection);
+
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces2);
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
+            }
+
+            effect.Parameters["WorldViewProj"].SetValue(_world2 * lightViewProjection);
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
             }
         }
     }

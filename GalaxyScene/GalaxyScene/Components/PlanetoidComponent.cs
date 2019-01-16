@@ -19,6 +19,7 @@ namespace GalaxyScene.Components
         private Texture2D _texture;
         private Matrix _world;
         private Effect _effect;
+        private Effect _effect2;
 
         public PlanetoidComponent(Game game) : base(game)
         {
@@ -37,6 +38,7 @@ namespace GalaxyScene.Components
             base.LoadContent();
             _texture = Game.Content.Load<Texture2D>("Planetoida/white-sand2");
             _effect = GetEffect();
+            _effect2 = Game.Content.Load<Effect>("Shader/Shader_ShadowMap");
         }
 
         private void Sphere(float radius, int slices)
@@ -98,9 +100,28 @@ namespace GalaxyScene.Components
 
 
             var effect = GetEffect(_effect);
-            effect.Parameters["ModelTexture"].SetValue(_texture);
+            effect.Parameters["ModelTexture2"].SetValue(_texture);
             effect.Parameters["World"].SetValue(_world);
             effect.CurrentTechnique = effect.Techniques["Textured"];
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _nFaces);
+            }
+        }
+
+        public override void DrawShadowMap()
+        {
+            base.DrawShadowMap();
+
+            GraphicsDevice device = Game.GraphicsDevice;
+            device.Indices = _indexBuf;
+            device.SetVertexBuffer(_vertexBuf);
+
+
+            var effect = _effect2;
+            effect.Parameters["WorldViewProj"].SetValue(_world * lightViewProjection);
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {

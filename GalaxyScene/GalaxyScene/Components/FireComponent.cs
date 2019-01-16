@@ -26,7 +26,7 @@ namespace GalaxyScene.Components
         public override void Initialize()
         {
             _world = Matrix.Identity;
-            Vector3 pos = new Vector3(-0.4f, 0.1f, 5);
+            Vector3 pos = new Vector3(-0.4f, 1.1f, 4.9f);
             _particleSystem = new ParticleSystem(pos, Vector3.Normalize(pos), 1000, 500, 0.02f);
             _particleRender = new ParticleRender();
             base.Initialize();

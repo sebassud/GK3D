@@ -13,6 +13,8 @@ namespace GalaxyScene.Services
     {
         Matrix Projection { get; }
 
+        Matrix ProjectionLight { get; }
+
         Matrix View { get; set; }
 
         Player Player { get; set; }
@@ -24,5 +26,7 @@ namespace GalaxyScene.Services
         GraphicsDeviceManager Graphics { get; }
 
         Texture2D TextureAd { get; set; }
+
+        Texture2D ShadowMap { get; set; }
     }
 }
